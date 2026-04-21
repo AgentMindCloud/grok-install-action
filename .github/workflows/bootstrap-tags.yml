@@ -1,15 +1,20 @@
 name: Bootstrap release tags (one-shot)
 
-# One-shot bootstrap: this runs once on GitHub's runner (which *can* push
-# tags via the default GITHUB_TOKEN, unlike certain proxied environments).
-# It creates v0.0.1 / v0.1.0 / v1.0.0 / v1 at the correct historical
-# commits and then deletes itself so it can never re-fire.
+# Creates v0.0.1 / v0.1.0 / v1.0.0 / v1 at their correct historical
+# commits using the GitHub REST API (more reliable from a runner than
+# `git push` when credentials are touchy). Re-runnable — existing tags
+# at the same SHA are skipped; v1 is force-updated every run.
+#
+# This file does not delete itself, because the default GITHUB_TOKEN
+# cannot modify workflow files. Delete it manually once v1.0.0 is on
+# origin.
 
 on:
   push:
     branches: [main]
     paths:
       - '.github/workflows/bootstrap-tags.yml'
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -21,51 +26,123 @@ concurrency:
 jobs:
   bootstrap:
     runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      OWNER:    ${{ github.repository_owner }}
+      REPO:     ${{ github.event.repository.name }}
     steps:
-      - name: Checkout with full history
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          persist-credentials: true
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Configure git identity
+      - name: Diagnostics
         run: |
-          git config user.name  "grokinstall-bot"
-          git config user.email "bot@grokagents.dev"
+          echo "Repository: ${{ github.repository }}"
+          echo "SHA:        ${{ github.sha }}"
+          echo "Ref:        ${{ github.ref }}"
+          echo "Actor:      ${{ github.actor }}"
 
-      - name: Create and push release tags
+      - name: Create annotated tag v0.0.1
         run: |
           set -euo pipefail
+          SHA=0085c9f618b94a188bbaa994ac72b8f93234cab9
+          TAG=v0.0.1
+          MSG="v0.0.1 — initial scaffold"
 
-          create_tag() {
-            local tag="$1"
-            local sha="$2"
-            local msg="$3"
-            if git rev-parse -q --verify "refs/tags/${tag}" >/dev/null; then
-              echo "Tag ${tag} already exists locally — skipping."
-              return 0
-            fi
-            if ! git cat-file -e "${sha}^{commit}" 2>/dev/null; then
-              echo "ERROR: commit ${sha} not found in local history."
-              exit 1
-            fi
-            echo "Creating ${tag} -> ${sha}"
-            git tag -a "${tag}" "${sha}" -m "${msg}"
-            git push origin "${tag}"
-          }
+          echo "→ creating tag object for ${TAG}"
+          TAG_OBJ=$(curl --fail-with-body -sS -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/${OWNER}/${REPO}/git/tags" \
+            -d "{\"tag\":\"${TAG}\",\"message\":\"${MSG}\",\"object\":\"${SHA}\",\"type\":\"commit\",\"tagger\":{\"name\":\"grokinstall-bot\",\"email\":\"bot@grokagents.dev\",\"date\":\"2026-04-21T00:00:00Z\"}}" \
+            | jq -r .sha)
+          echo "tag object sha: ${TAG_OBJ}"
 
-          create_tag v0.0.1 0085c9f "v0.0.1 — initial scaffold"
-          create_tag v0.1.0 452cae6 "v0.1.0 — sample grok-install.yaml"
-          create_tag v1.0.0 5a4e7c3 "v1.0.0 — Marketplace launch"
+          echo "→ creating ref refs/tags/${TAG}"
+          curl --fail-with-body -sS -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/${OWNER}/${REPO}/git/refs" \
+            -d "{\"ref\":\"refs/tags/${TAG}\",\"sha\":\"${TAG_OBJ}\"}" \
+            || echo "ref creation returned non-zero (likely already exists) — continuing"
 
-          echo "Force-moving floating v1 tag to v1.0.0"
-          git tag -f v1 v1.0.0
-          git push -f origin v1
-
-      - name: Self-destruct
+      - name: Create annotated tag v0.1.0
         run: |
           set -euo pipefail
-          git rm .github/workflows/bootstrap-tags.yml
-          git commit -m "chore(ci): remove one-shot bootstrap-tags workflow [skip ci]"
-          git push origin main
+          SHA=452cae6822c36f935078766441b3f6ba2deb380a
+          TAG=v0.1.0
+          MSG="v0.1.0 — sample grok-install.yaml"
+
+          TAG_OBJ=$(curl --fail-with-body -sS -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/${OWNER}/${REPO}/git/tags" \
+            -d "{\"tag\":\"${TAG}\",\"message\":\"${MSG}\",\"object\":\"${SHA}\",\"type\":\"commit\",\"tagger\":{\"name\":\"grokinstall-bot\",\"email\":\"bot@grokagents.dev\",\"date\":\"2026-04-21T00:00:00Z\"}}" \
+            | jq -r .sha)
+
+          curl --fail-with-body -sS -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/${OWNER}/${REPO}/git/refs" \
+            -d "{\"ref\":\"refs/tags/${TAG}\",\"sha\":\"${TAG_OBJ}\"}" \
+            || echo "ref creation returned non-zero (likely already exists) — continuing"
+
+      - name: Create annotated tag v1.0.0
+        run: |
+          set -euo pipefail
+          SHA=5a4e7c35233acae134b47dc411d024dfc1561d93
+          TAG=v1.0.0
+          MSG="v1.0.0 — Marketplace launch (validate + scan + badge + visuals-preview readiness)"
+
+          TAG_OBJ=$(curl --fail-with-body -sS -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/${OWNER}/${REPO}/git/tags" \
+            -d "{\"tag\":\"${TAG}\",\"message\":\"${MSG}\",\"object\":\"${SHA}\",\"type\":\"commit\",\"tagger\":{\"name\":\"grokinstall-bot\",\"email\":\"bot@grokagents.dev\",\"date\":\"2026-04-21T00:00:00Z\"}}" \
+            | jq -r .sha)
+
+          curl --fail-with-body -sS -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/${OWNER}/${REPO}/git/refs" \
+            -d "{\"ref\":\"refs/tags/${TAG}\",\"sha\":\"${TAG_OBJ}\"}" \
+            || echo "ref creation returned non-zero (likely already exists) — continuing"
+
+      - name: Create or force-move lightweight v1 ref
+        run: |
+          set -euo pipefail
+          SHA=5a4e7c35233acae134b47dc411d024dfc1561d93
+          TAG=v1
+
+          # Try to create; if it already exists (422), patch it with force=true.
+          HTTP_CODE=$(curl -sS -o /tmp/create.json -w "%{http_code}" -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/${OWNER}/${REPO}/git/refs" \
+            -d "{\"ref\":\"refs/tags/${TAG}\",\"sha\":\"${SHA}\"}")
+
+          if [ "${HTTP_CODE}" = "201" ]; then
+            echo "created refs/tags/${TAG}"
+            exit 0
+          fi
+
+          echo "create returned ${HTTP_CODE}; falling back to PATCH (force-update)"
+          cat /tmp/create.json
+          curl --fail-with-body -sS -X PATCH \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/${OWNER}/${REPO}/git/refs/tags/${TAG}" \
+            -d "{\"sha\":\"${SHA}\",\"force\":true}"
+
+      - name: List tags on origin
+        run: |
+          curl --fail-with-body -sS \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/${OWNER}/${REPO}/git/refs/tags" \
+            | jq -r '.[] | "\(.ref)\t\(.object.sha)"'
