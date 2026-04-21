@@ -1,0 +1,99 @@
+name: Bug report
+description: Something in the action is broken or misbehaving.
+title: "bug: <short summary>"
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug report. Please fill in as much of this form as you can — incomplete reports are harder to triage.
+
+        For security vulnerabilities, use the private advisory form instead (see `SECURITY.md`).
+
+  - type: input
+    id: action-version
+    attributes:
+      label: Action version
+      description: What git ref or tag did you pin? (e.g. `@v1`, `@v1.0.0`, `@<sha>`)
+      placeholder: "v1.0.0"
+    validations:
+      required: true
+
+  - type: input
+    id: cli-version
+    attributes:
+      label: cli-version input
+      description: What did you pass for the `cli-version` input? (`latest`, `2.14.0`, etc.)
+      placeholder: "2.14.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Mode
+      options:
+        - strict
+        - warn
+    validations:
+      required: true
+
+  - type: dropdown
+    id: runner
+    attributes:
+      label: Runner OS
+      options:
+        - ubuntu-latest
+        - ubuntu-22.04
+        - ubuntu-24.04
+        - macos-latest
+        - windows-latest
+        - self-hosted
+        - Other (describe below)
+    validations:
+      required: true
+
+  - type: textarea
+    id: workflow
+    attributes:
+      label: Workflow snippet
+      description: The relevant job / step from your workflow file. Redact secrets.
+      render: yaml
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Action logs
+      description: Paste the failing step's logs. Expand the step in the Actions tab → gear icon → "View raw logs".
+      render: shell
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: Minimal repro — ideally a link to a public repo or a failing CI run.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected vs. actual behavior
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Pre-flight checks
+      options:
+        - label: I searched existing issues and this isn't a duplicate.
+          required: true
+        - label: I tried pinning `cli-version` to an exact semver and the problem persists.
+          required: false
+        - label: I am not reporting a security vulnerability (those go through the private advisory form).
+          required: true

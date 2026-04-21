@@ -1,0 +1,17 @@
+spec: v1
+kind: agent
+name: summarizer-bad-hex
+model: grok-4
+prompt: ./prompt.md
+
+permissions:
+  network: false
+  filesystem: read
+
+visuals:
+  aspectRatio: "16:9"
+  palette:
+    background: "#0A0A0A"
+    primary:    "#GGG000"   # intentionally invalid hex — triggers visuals/palette-hex-invalid
+    accent:     "#00FF9D"
+    danger:     "#FF2D55"

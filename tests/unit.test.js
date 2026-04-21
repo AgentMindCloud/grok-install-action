@@ -93,12 +93,64 @@ function testBadgeFailed() {
   assert(svg.includes('FAIL'), 'labels FAIL when not passed');
 }
 
+function testAnnotationsVisualsValid() {
+  console.log('annotations.js — valid v2.14 visuals fixture');
+  const summary = path.join(os.tmpdir(), `summary-visuals-valid.${Date.now()}.md`);
+  fs.writeFileSync(summary, '');
+  const out = runNode('annotations.js', {
+    REPORT_PATH: path.join(FIXTURES, 'valid-v2.14-visuals', 'report.json'),
+    INPUT_MODE: 'strict',
+    GITHUB_STEP_SUMMARY: summary
+  });
+  assert(!out.includes('::error '),  'valid visuals fixture never emits ::error');
+  assert(!out.includes('::warning '),'valid visuals fixture never emits ::warning');
+  assert(out.includes('::notice '),  'info severity becomes ::notice');
+  assert(out.includes('visuals/aspect-ratio-recognized'), 'rule id appears in annotation title');
+  const md = fs.readFileSync(summary, 'utf8');
+  assert(md.includes('**Safety score:** 96'), 'job summary reports safety score 96');
+  assert(md.includes('visuals/aspect-ratio-recognized'), 'job summary lists the visuals rule');
+}
+
+function testAnnotationsVisualsBadHex() {
+  console.log('annotations.js — invalid visuals (bad hex) fixture, strict mode');
+  const out = runNode('annotations.js', {
+    REPORT_PATH: path.join(FIXTURES, 'invalid-visuals-bad-hex', 'report.json'),
+    INPUT_MODE: 'strict'
+  });
+  assert(out.includes('::error '),                  'bad-hex fixture emits ::error in strict mode');
+  assert((out.match(/::error /g) || []).length === 1, 'exactly one ::error for the single bad-hex finding');
+  assert(out.includes('visuals/palette-hex-invalid'), 'rule id appears in annotation title');
+  assert(out.includes('%23GGG000') || out.includes('#GGG000'),
+    'error message mentions the invalid hex value');
+}
+
+function testBadgePassWithVisuals() {
+  console.log('badge.js — valid v2.14 visuals fixture (score 96, passed)');
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'badge-visuals-'));
+  const githubOutput = path.join(tmp, 'gh-output');
+  fs.writeFileSync(githubOutput, '');
+  runNode('badge.js', {
+    REPORT_PATH: path.join(FIXTURES, 'valid-v2.14-visuals', 'report.json'),
+    WORKING_DIRECTORY: tmp,
+    GITHUB_OUTPUT: githubOutput
+  });
+  const svgPath = path.join(tmp, 'badges', 'grok-native-certified.svg');
+  assert(fs.existsSync(svgPath), 'writes badges/grok-native-certified.svg');
+  const svg = fs.readFileSync(svgPath, 'utf8');
+  assert(svg.includes('CERTIFIED'), 'labels CERTIFIED when score >= 90 (visuals fixture has 96)');
+  assert(svg.includes('#00FF9D'),   'visuals pass-high uses success-neon green');
+  assert(!svg.includes('FAIL'),     'visuals valid fixture does not emit FAIL');
+}
+
 try {
   testAnnotationsPass();
   testAnnotationsFailStrict();
   testAnnotationsFailWarn();
   testBadgeCertified();
   testBadgeFailed();
+  testAnnotationsVisualsValid();
+  testAnnotationsVisualsBadHex();
+  testBadgePassWithVisuals();
 } catch (err) {
   console.error(err);
   process.exit(1);

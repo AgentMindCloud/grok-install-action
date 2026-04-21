@@ -1,0 +1,20 @@
+{
+  "generatedAt": "2026-04-21T00:00:00.000Z",
+  "cli": { "validateExit": 1, "scanExit": 0 },
+  "safetyScore": 0,
+  "passed": false,
+  "counts": { "error": 1, "warning": 0, "info": 0, "total": 1 },
+  "findings": [
+    {
+      "source": "validate",
+      "file": ".grok/grok-install.yaml",
+      "line": 12,
+      "column": 17,
+      "rule": "visuals/palette-hex-invalid",
+      "severity": "error",
+      "message": "visuals.palette.primary is not a valid #RRGGBB hex colour: \"#GGG000\".",
+      "docs": "https://grokagents.dev/docs/rules/visuals/palette-hex-invalid"
+    }
+  ],
+  "visualsPreviewUrl": ""
+}
