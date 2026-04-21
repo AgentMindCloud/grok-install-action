@@ -1,5 +1,14 @@
 <div align="center">
 
+[![CI](https://img.shields.io/github/actions/workflow/status/AgentMindCloud/grok-install-action/test.yml?branch=main&label=CI&style=flat-square&labelColor=0A0A0A&color=00F0FF)](https://github.com/AgentMindCloud/grok-install-action/actions/workflows/test.yml)
+[![Marketplace](https://img.shields.io/badge/marketplace-grokinstall--validate--scan-00F0FF?style=flat-square&labelColor=0A0A0A)](https://github.com/marketplace/actions/grokinstall-validate-scan)
+[![Release](https://img.shields.io/github/v/release/AgentMindCloud/grok-install-action?style=flat-square&labelColor=0A0A0A&color=00FF9D)](https://github.com/AgentMindCloud/grok-install-action/releases)
+[![License: Apache 2.0](https://img.shields.io/badge/license-Apache_2.0-00F0FF?style=flat-square&labelColor=0A0A0A)](./LICENSE)
+[![Node ≥ 20](https://img.shields.io/badge/node-%E2%89%A5%2020-00FF9D?style=flat-square&labelColor=0A0A0A)](https://nodejs.org/)
+[![Conventional Commits](https://img.shields.io/badge/commits-conventional-00F0FF?style=flat-square&labelColor=0A0A0A)](https://www.conventionalcommits.org/)
+
+<br />
+
 <img src="https://img.shields.io/badge/GROKINSTALL-action-00F0FF?style=for-the-badge&labelColor=0A0A0A" alt="GrokInstall Action" />
 <img src="https://img.shields.io/badge/built_for-Grok_on_X-00FF9D?style=for-the-badge&labelColor=0A0A0A" alt="Built for Grok on X" />
 
@@ -8,6 +17,12 @@
 **Validate `.grok/` agents, run the safety scanner, post inline PR annotations, and generate a Grok-Native Certified badge — on every push and pull request.**
 
 <sub>Built for Grok on X · <a href="https://grokagents.dev">grokagents.dev</a></sub>
+
+<br /><br />
+
+<a href="https://grokagents.dev">
+  <img src="./docs/img/pr-comment-hero.png" alt="GrokInstall pinned PR comment with safety score, findings table, and inline annotations on the Files Changed tab" width="760" />
+</a>
 
 </div>
 
@@ -52,10 +67,30 @@ jobs:
       - uses: AgentMindCloud/grok-install-action@v1
 ```
 
+### Quick add (one-liner)
+
+```bash
+mkdir -p .github/workflows && curl -fsSL \
+  https://raw.githubusercontent.com/AgentMindCloud/grok-install-action/v1/workflows-examples/basic.yml \
+  -o .github/workflows/grokinstall.yml
+```
+
 More examples in [`workflows-examples/`](./workflows-examples):
 - [`basic.yml`](./workflows-examples/basic.yml) — minimal single-agent repo
 - [`matrix.yml`](./workflows-examples/matrix.yml) — multi-agent monorepo fan-out
 - [`release.yml`](./workflows-examples/release.yml) — gate on release tags
+
+---
+
+## What's new in v1.0
+
+- **Marketplace launch.** Listed as `GrokInstall Validate & Scan` — see `marketplace.yml`.
+- **CLI version pinned.** `cli-version` now defaults to `2.14.0` (was `latest`) for supply-chain reproducibility. Rationale and override syntax in [`docs/cli-version-pinning.md`](./docs/cli-version-pinning.md).
+- **`visuals-preview` input (opt-in, default `false`).** When enabled on `cli-version >= 2.14.0`, the CLI renders an HTML preview and the URL is surfaced in the PR comment plus the new `visuals-preview-url` output.
+- **Release automation.** Tag-triggered `.github/workflows/release.yml` cuts a GitHub Release, copies notes from `CHANGELOG.md`, and force-moves the floating `v1` major-version tag.
+- **Community health files.** `CONTRIBUTING.md`, `CHANGELOG.md`, `CODE_OF_CONDUCT.md`, `CODEOWNERS`, `FUNDING.yml`, issue forms, and a PR template.
+
+> Auto-Post-to-X is still deferred to v2. This action does not post to X.
 
 ---
 
@@ -65,7 +100,8 @@ More examples in [`workflows-examples/`](./workflows-examples):
 | --- | --- | --- |
 | `working-directory` | `.` | Path to the repo root containing `.grok/` (or a sub-directory for monorepos). |
 | `mode` | `strict` | `strict` fails the job on errors. `warn` annotates only, never fails. |
-| `cli-version` | `latest` | `grok-install-cli` version to install (any npm dist-tag or semver). |
+| `cli-version` | `2.14.0` | `grok-install-cli` version to install (any npm dist-tag or semver). See [`docs/cli-version-pinning.md`](./docs/cli-version-pinning.md). |
+| `visuals-preview` | `false` | Forward `--visuals-preview` to the CLI and surface the rendered URL. Requires `cli-version >= 2.14.0`. |
 | `update-badge` | `true` | Generate `/badges/grok-native-certified.svg` and commit it on `main` pushes. |
 | `comment-on-pr` | `true` | Post / update a PR comment with the report. |
 | `github-token` | `${{ github.token }}` | Token for PR comments + badge commit. |
@@ -78,6 +114,7 @@ More examples in [`workflows-examples/`](./workflows-examples):
 | `safety-score` | Numeric safety score 0-100. |
 | `report-path` | Absolute path to the generated `report.json`. |
 | `badge-path` | Repo-relative path to the SVG badge (when `update-badge: true`). |
+| `visuals-preview-url` | URL of the rendered visuals preview (when `visuals-preview: true` on `cli-version >= 2.14.0`). Empty string otherwise. |
 
 ---
 
