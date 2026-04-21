@@ -1,0 +1,14 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions & Discussion
+    url: https://github.com/AgentMindCloud/grok-install-action/discussions
+    about: Ask usage questions, share workflow patterns, or propose ideas before filing an issue.
+  - name: Security Vulnerability
+    url: https://github.com/AgentMindCloud/grok-install-action/security/advisories/new
+    about: Report a vulnerability privately. Do NOT open a public issue for security problems.
+  - name: CLI bugs (grok-install-cli)
+    url: https://github.com/AgentMindCloud/grok-install-cli/issues/new/choose
+    about: Bugs in validation rules, scan rules, or safety scoring belong in the CLI repo.
+  - name: GrokAgents Docs
+    url: https://grokagents.dev
+    about: Main site — docs, brand assets, agent examples.
