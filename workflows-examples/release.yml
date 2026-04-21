@@ -1,0 +1,27 @@
+# release.yml — gate releases on a clean GrokInstall run. Fails the release
+# workflow in strict mode so a broken .grok/ never ships.
+name: GrokInstall (release)
+
+on:
+  release:
+    types: [created, published]
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: read
+  checks: write
+
+jobs:
+  grokinstall:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: AgentMindCloud/grok-install-action@v1
+        with:
+          mode: strict
+          cli-version: latest
+          update-badge: false
+          comment-on-pr: false
