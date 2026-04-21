@@ -1,0 +1,66 @@
+name: Feature request
+description: Propose a new capability, input, output, or workflow pattern.
+title: "feat: <short summary>"
+labels: ["enhancement", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Ideas that change validation or scan **rules** belong in [`grok-install-cli`](https://github.com/AgentMindCloud/grok-install-cli/issues). This repo is for the action wrapper — inputs, outputs, PR comment format, badge, release flow, etc.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What can't you do today? What's clunky, missing, or surprising?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: What would the action do? Sketch inputs/outputs/workflow YAML if relevant.
+      render: yaml
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Other approaches you weighed and why you didn't pick them.
+
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Target scope
+      description: When would this ship?
+      options:
+        - v1 patch (backwards-compatible)
+        - v1 minor (new input/output, still backwards-compatible)
+        - v2 (breaking change OK)
+        - Not sure
+    validations:
+      required: true
+
+  - type: dropdown
+    id: pr
+    attributes:
+      label: Are you willing to open a PR?
+      options:
+        - "Yes, I'll send a PR"
+        - "Maybe, with guidance"
+        - "No, requesting only"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Pre-flight checks
+      options:
+        - label: I searched existing issues and discussions for this idea.
+          required: true
+        - label: This is about the action wrapper, not a CLI validation or scan rule.
+          required: true

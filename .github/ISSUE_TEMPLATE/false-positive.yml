@@ -1,0 +1,74 @@
+name: False positive
+description: A finding you believe is incorrectly flagged (wrong severity, mis-identified file, safe pattern marked unsafe).
+title: "false-positive: <rule-id> — <short summary>"
+labels: ["false-positive", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping us tune the rules. Most false positives are resolved in [`grok-install-cli`](https://github.com/AgentMindCloud/grok-install-cli) — we'll transfer this issue there if needed.
+
+  - type: input
+    id: rule-id
+    attributes:
+      label: Rule ID
+      description: The `rule` value from the `::error`/`::warning` annotation or the PR comment table.
+      placeholder: "scan.filesystem.write-outside-workspace"
+    validations:
+      required: true
+
+  - type: input
+    id: cli-version
+    attributes:
+      label: cli-version used
+      placeholder: "2.14.0"
+    validations:
+      required: true
+
+  - type: textarea
+    id: finding
+    attributes:
+      label: Finding excerpt
+      description: Paste the exact message from the annotation or PR comment.
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: snippet
+    attributes:
+      label: Offending .grok/ snippet
+      description: The YAML / prompt fragment the rule flagged. Redact anything sensitive.
+      render: yaml
+    validations:
+      required: true
+
+  - type: textarea
+    id: rationale
+    attributes:
+      label: Why this is safe / intended
+      description: Explain why the rule is wrong for your case. Links to docs, specs, or threat models help.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: type
+    attributes:
+      label: What kind of false positive?
+      options:
+        - Rule shouldn't fire at all for this pattern
+        - Severity is too high (e.g., error → warning)
+        - Wrong file / line attribution
+        - Fires on a legitimate framework / library pattern
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Pre-flight checks
+      options:
+        - label: I'm on a supported `cli-version` (≥ 2.0.0).
+          required: true
+        - label: I checked whether a newer cli version already fixes this.
+          required: false
