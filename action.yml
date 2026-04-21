@@ -38,9 +38,11 @@ inputs:
     required: false
     default: 'true'
   github-token:
-    description: 'Token used to post PR comments and commit the badge. Defaults to ${{ github.token }}.'
+    description: >
+      Token used to post PR comments and commit the badge. Leave empty to fall
+      back to the workflow-provided github.token.
     required: false
-    default: ${{ github.token }}
+    default: ''
 
 outputs:
   passed:
@@ -100,7 +102,7 @@ runs:
       if: always() && inputs.comment-on-pr == 'true' && github.event_name == 'pull_request' && steps.run.outputs.report-path != ''
       shell: bash
       env:
-        GITHUB_TOKEN: ${{ inputs.github-token }}
+        GITHUB_TOKEN: ${{ inputs.github-token != '' && inputs.github-token || github.token }}
         REPORT_PATH: ${{ steps.run.outputs.report-path }}
         PASSED: ${{ steps.run.outputs.passed }}
         SAFETY_SCORE: ${{ steps.run.outputs.safety-score }}
@@ -123,7 +125,7 @@ runs:
       if: always() && inputs.update-badge == 'true' && github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.badge.outputs.badge-path != ''
       shell: bash
       env:
-        GITHUB_TOKEN: ${{ inputs.github-token }}
+        GITHUB_TOKEN: ${{ inputs.github-token != '' && inputs.github-token || github.token }}
         BADGE_PATH: ${{ steps.badge.outputs.badge-path }}
       working-directory: ${{ inputs.working-directory }}
       run: |

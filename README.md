@@ -104,7 +104,7 @@ More examples in [`workflows-examples/`](./workflows-examples):
 | `visuals-preview` | `false` | Forward `--visuals-preview` to the CLI and surface the rendered URL. Requires `cli-version >= 2.14.0`. |
 | `update-badge` | `true` | Generate `/badges/grok-native-certified.svg` and commit it on `main` pushes. |
 | `comment-on-pr` | `true` | Post / update a PR comment with the report. |
-| `github-token` | `${{ github.token }}` | Token for PR comments + badge commit. |
+| `github-token` | _(empty — falls back to `github.token`)_ | Token for PR comments + badge commit. Pass a PAT only if you need elevated scopes. |
 
 ## Outputs
 

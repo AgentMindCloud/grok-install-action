@@ -11,10 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Nothing yet.
 
 ### Changed
-- Nothing yet.
+- `github-token` input no longer defaults to `${{ github.token }}`. Composite
+  actions can't reference the `github` context in an input default; the token
+  now defaults to empty and each step falls back to `github.token` inline.
+  Consumers don't need to change anything — leaving the input unset keeps the
+  old behaviour.
 
 ### Fixed
-- Nothing yet.
+- Load-time template error `Unrecognized named-value: 'github'` on `action.yml`.
 
 ## [1.0.0] - 2026-04-21
 
