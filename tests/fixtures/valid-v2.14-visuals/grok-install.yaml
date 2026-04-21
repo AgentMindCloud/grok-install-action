@@ -1,0 +1,17 @@
+spec: v1
+kind: agent
+name: summarizer-with-visuals
+model: grok-4
+prompt: ./prompt.md
+
+permissions:
+  network: false
+  filesystem: read
+
+visuals:
+  aspectRatio: "16:9"
+  palette:
+    background: "#0A0A0A"
+    primary:    "#00F0FF"
+    accent:     "#00FF9D"
+    danger:     "#FF2D55"

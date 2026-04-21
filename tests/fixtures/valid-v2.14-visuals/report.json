@@ -1,0 +1,20 @@
+{
+  "generatedAt": "2026-04-21T00:00:00.000Z",
+  "cli": { "validateExit": 0, "scanExit": 0 },
+  "safetyScore": 96,
+  "passed": true,
+  "counts": { "error": 0, "warning": 0, "info": 1, "total": 1 },
+  "findings": [
+    {
+      "source": "validate",
+      "file": ".grok/grok-install.yaml",
+      "line": 8,
+      "column": 1,
+      "rule": "visuals/aspect-ratio-recognized",
+      "severity": "info",
+      "message": "Aspect ratio 16:9 accepted; preview rendered at docs/visuals.",
+      "docs": "https://grokagents.dev/docs/rules/visuals/aspect-ratio-recognized"
+    }
+  ],
+  "visualsPreviewUrl": "https://preview.grokagents.dev/abc123.html"
+}
