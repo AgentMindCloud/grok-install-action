@@ -16,9 +16,19 @@ inputs:
     required: false
     default: 'strict'
   cli-version:
-    description: 'Version of grok-install-cli to install (npm dist-tag or semver).'
+    description: >
+      Version of grok-install-cli to install. Accepts any npm dist-tag or semver
+      (e.g. "2.14.0", "latest", "2"). Pinned to an exact version by default for
+      supply-chain reproducibility — see docs/cli-version-pinning.md.
     required: false
-    default: 'latest'
+    default: '2.14.0'
+  visuals-preview:
+    description: >
+      When true, ask the CLI to render an HTML visuals preview for each agent
+      and include the URL in the PR comment + visuals-preview-url output.
+      Requires cli-version >= 2.14.0.
+    required: false
+    default: 'false'
   update-badge:
     description: 'Generate /badges/grok-native-certified.svg and commit it on main-branch pushes.'
     required: false
@@ -45,6 +55,11 @@ outputs:
   badge-path:
     description: 'Path to the generated SVG badge (relative to working-directory).'
     value: ${{ steps.badge.outputs.badge-path }}
+  visuals-preview-url:
+    description: >
+      URL of the rendered visuals preview when visuals-preview:true and
+      cli-version >= 2.14.0. Empty string otherwise.
+    value: ${{ steps.run.outputs.visuals-preview-url }}
 
 runs:
   using: 'composite'
@@ -69,6 +84,7 @@ runs:
       env:
         INPUT_WORKING_DIRECTORY: ${{ inputs.working-directory }}
         INPUT_MODE: ${{ inputs.mode }}
+        INPUT_VISUALS_PREVIEW: ${{ inputs.visuals-preview }}
         ACTION_PATH: ${{ github.action_path }}
       run: bash "${{ github.action_path }}/scripts/run.sh"
 
@@ -89,6 +105,7 @@ runs:
         PASSED: ${{ steps.run.outputs.passed }}
         SAFETY_SCORE: ${{ steps.run.outputs.safety-score }}
         INPUT_MODE: ${{ inputs.mode }}
+        VISUALS_PREVIEW_URL: ${{ steps.run.outputs.visuals-preview-url }}
       run: node "${{ github.action_path }}/scripts/comment.js"
 
     - name: Generate badge
