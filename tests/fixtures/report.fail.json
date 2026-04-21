@@ -1,0 +1,39 @@
+{
+  "generatedAt": "2026-04-21T00:00:00.000Z",
+  "cli": { "validateExit": 1, "scanExit": 0 },
+  "safetyScore": 62,
+  "passed": false,
+  "counts": { "error": 2, "warning": 1, "info": 0, "total": 3 },
+  "findings": [
+    {
+      "source": "validate",
+      "file": ".grok/grok-install.yaml",
+      "line": 3,
+      "column": 1,
+      "rule": "schema/missing-field",
+      "severity": "error",
+      "message": "metadata.name is required",
+      "docs": "https://grokagents.dev/docs/rules/schema/missing-field"
+    },
+    {
+      "source": "scan",
+      "file": ".grok/grok-install.yaml",
+      "line": 18,
+      "column": 5,
+      "rule": "safety/network-without-justification",
+      "severity": "error",
+      "message": "permissions.network=true but no network_justification provided",
+      "docs": "https://grokagents.dev/docs/rules/safety/network-without-justification"
+    },
+    {
+      "source": "scan",
+      "file": ".grok/prompt.md",
+      "line": 1,
+      "column": 1,
+      "rule": "safety/disclaimer-missing",
+      "severity": "warning",
+      "message": "Disclaimer not found in prompt.md",
+      "docs": "https://grokagents.dev/docs/rules/safety/disclaimer-missing"
+    }
+  ]
+}

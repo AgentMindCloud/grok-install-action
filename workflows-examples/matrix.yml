@@ -1,0 +1,52 @@
+# matrix.yml — multi-agent monorepo. Runs the action against each agent
+# directory in parallel. Each job posts its own PR comment (they're
+# scoped by the hidden marker, so they won't overwrite each other if you
+# change the marker per-agent; if you want a single aggregated comment,
+# set comment-on-pr: false and roll your own aggregator).
+name: GrokInstall (matrix)
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+  checks: write
+
+jobs:
+  grokinstall:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        agent:
+          - agents/summarizer
+          - agents/researcher
+          - agents/planner
+    name: ${{ matrix.agent }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: AgentMindCloud/grok-install-action@v1
+        with:
+          working-directory: ${{ matrix.agent }}
+          mode: strict
+          update-badge: false         # badge lives in the repo root, generate it once in a separate job
+          comment-on-pr: true
+
+  grokinstall-badge:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: grokinstall
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: AgentMindCloud/grok-install-action@v1
+        with:
+          working-directory: agents/summarizer    # pick the "flagship" agent for the root badge
+          mode: warn
+          update-badge: true
+          comment-on-pr: false

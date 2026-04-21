@@ -1,1 +1,22 @@
-
+spec: grok-install/v1
+kind: agent
+metadata:
+  name: sample-summarizer
+  version: 1.0.0
+  description: Minimal fixture agent used by grok-install-action integration tests.
+  author: AgentMindCloud
+  license: Apache-2.0
+  homepage: https://grokagents.dev
+runtime:
+  platform: grok
+  model: grok-4
+  entrypoint: prompt.md
+capabilities:
+  - text-summarization
+permissions:
+  network: false
+  filesystem: read
+  secrets: []
+safety:
+  disclaimer: |
+    Sample agent for integration testing. Not affiliated with xAI, Grok, or X.

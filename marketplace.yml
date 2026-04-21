@@ -1,0 +1,39 @@
+# GitHub Marketplace metadata.
+# Consumed by the Marketplace when the action is published from a release.
+name: GrokInstall Validate & Scan
+slug: grokinstall-validate-scan
+description: >
+  Validate .grok/ agents, run the safety scanner, post inline PR annotations
+  and a pinned PR comment, and generate a Grok-Native Certified badge. Built
+  for the Grok-on-X agent ecosystem.
+
+author: AgentMindCloud
+homepage: https://grokagents.dev
+documentation: https://github.com/AgentMindCloud/grok-install-action#readme
+issues: https://github.com/AgentMindCloud/grok-install-action/issues
+
+branding:
+  icon: shield
+  color: blue
+
+categories:
+  - code-quality
+  - code-review
+  - continuous-integration
+  - security
+
+tags:
+  - grok
+  - grokinstall
+  - agents
+  - ai
+  - validation
+  - safety
+  - yaml
+  - composite
+
+pricing: free
+
+disclaimer: >
+  GrokInstall is an independent community project. Not affiliated with
+  xAI, Grok, or X.

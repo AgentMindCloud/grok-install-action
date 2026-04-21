@@ -1,0 +1,19 @@
+{
+  "generatedAt": "2026-04-21T00:00:00.000Z",
+  "cli": { "validateExit": 0, "scanExit": 0 },
+  "safetyScore": 98,
+  "passed": true,
+  "counts": { "error": 0, "warning": 1, "info": 0, "total": 1 },
+  "findings": [
+    {
+      "source": "scan",
+      "file": ".grok/grok-install.yaml",
+      "line": 12,
+      "column": 3,
+      "rule": "safety/disclaimer-recommended",
+      "severity": "warning",
+      "message": "Disclaimer is short; consider the full community-project language.",
+      "docs": "https://grokagents.dev/docs/rules/safety/disclaimer-recommended"
+    }
+  ]
+}

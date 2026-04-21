@@ -1,0 +1,30 @@
+# basic.yml — drop into .github/workflows/grokinstall.yml.
+# Validates .grok/ agents and posts a PR comment with the safety report.
+name: GrokInstall
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: write        # needed only for badge commit on main; use 'read' if update-badge:false
+  pull-requests: write
+  checks: write
+
+jobs:
+  grokinstall:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: AgentMindCloud/grok-install-action@v1
+        with:
+          working-directory: .
+          mode: strict
+          cli-version: latest
+          update-badge: true
+          comment-on-pr: true
