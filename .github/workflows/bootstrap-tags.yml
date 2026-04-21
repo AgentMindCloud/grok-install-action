@@ -1,0 +1,71 @@
+name: Bootstrap release tags (one-shot)
+
+# One-shot bootstrap: this runs once on GitHub's runner (which *can* push
+# tags via the default GITHUB_TOKEN, unlike certain proxied environments).
+# It creates v0.0.1 / v0.1.0 / v1.0.0 / v1 at the correct historical
+# commits and then deletes itself so it can never re-fire.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/bootstrap-tags.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: bootstrap-tags
+  cancel-in-progress: false
+
+jobs:
+  bootstrap:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout with full history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure git identity
+        run: |
+          git config user.name  "grokinstall-bot"
+          git config user.email "bot@grokagents.dev"
+
+      - name: Create and push release tags
+        run: |
+          set -euo pipefail
+
+          create_tag() {
+            local tag="$1"
+            local sha="$2"
+            local msg="$3"
+            if git rev-parse -q --verify "refs/tags/${tag}" >/dev/null; then
+              echo "Tag ${tag} already exists locally — skipping."
+              return 0
+            fi
+            if ! git cat-file -e "${sha}^{commit}" 2>/dev/null; then
+              echo "ERROR: commit ${sha} not found in local history."
+              exit 1
+            fi
+            echo "Creating ${tag} -> ${sha}"
+            git tag -a "${tag}" "${sha}" -m "${msg}"
+            git push origin "${tag}"
+          }
+
+          create_tag v0.0.1 0085c9f "v0.0.1 — initial scaffold"
+          create_tag v0.1.0 452cae6 "v0.1.0 — sample grok-install.yaml"
+          create_tag v1.0.0 5a4e7c3 "v1.0.0 — Marketplace launch"
+
+          echo "Force-moving floating v1 tag to v1.0.0"
+          git tag -f v1 v1.0.0
+          git push -f origin v1
+
+      - name: Self-destruct
+        run: |
+          set -euo pipefail
+          git rm .github/workflows/bootstrap-tags.yml
+          git commit -m "chore(ci): remove one-shot bootstrap-tags workflow [skip ci]"
+          git push origin main
