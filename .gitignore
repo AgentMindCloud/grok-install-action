@@ -8,3 +8,7 @@ npm-debug.log*
 # Fixture outputs / tmp reports
 /tmp-badge/
 /tmp/
+
+# Python (scripts/annotate.py)
+__pycache__/
+*.pyc
