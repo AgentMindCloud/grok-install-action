@@ -1,48 +1,66 @@
-<div align="center">
+<!-- NEON / CYBERPUNK REPO TEMPLATE · GROK-INSTALL-ACTION -->
 
-[![CI](https://img.shields.io/github/actions/workflow/status/AgentMindCloud/grok-install-action/test.yml?branch=main&label=CI&style=flat-square&labelColor=0A0A0A&color=00F0FF)](https://github.com/AgentMindCloud/grok-install-action/actions/workflows/test.yml)
-[![Marketplace](https://img.shields.io/badge/marketplace-grokinstall--validate--scan-00F0FF?style=flat-square&labelColor=0A0A0A)](https://github.com/marketplace/actions/grokinstall-validate-scan)
-[![Release](https://img.shields.io/github/v/release/AgentMindCloud/grok-install-action?style=flat-square&labelColor=0A0A0A&color=00FF9D)](https://github.com/AgentMindCloud/grok-install-action/releases)
-[![License: Apache 2.0](https://img.shields.io/badge/license-Apache_2.0-00F0FF?style=flat-square&labelColor=0A0A0A)](./LICENSE)
-[![Node ≥ 20](https://img.shields.io/badge/node-%E2%89%A5%2020-00FF9D?style=flat-square&labelColor=0A0A0A)](https://nodejs.org/)
-[![Conventional Commits](https://img.shields.io/badge/commits-conventional-00F0FF?style=flat-square&labelColor=0A0A0A)](https://www.conventionalcommits.org/)
+<p align="center">
+  <img
+    src="https://capsule-render.vercel.app/api?type=waving&height=230&color=0:00E5FF,50:7C3AED,100:FF4FD8&text=grok-install-action&fontSize=50&fontColor=EAF8FF&fontAlign=50&fontAlignY=38&desc=Validate%20%C2%B7%20Scan%20%C2%B7%20Annotate%20%C2%B7%20Certify%20%E2%80%94%20On%20Every%20PR&descAlignY=62&descSize=17"
+    width="100%"
+    alt="header"
+  />
+</p>
 
-<br />
+<h1 align="center">⚡ grok-install-action</h1>
 
-<img src="https://img.shields.io/badge/GROKINSTALL-action-00F0FF?style=for-the-badge&labelColor=0A0A0A" alt="GrokInstall Action" />
-<img src="https://img.shields.io/badge/built_for-Grok_on_X-00FF9D?style=for-the-badge&labelColor=0A0A0A" alt="Built for Grok on X" />
+<p align="center">
+  <b>Validate <code>.grok/</code> agents, run the safety scanner, post inline PR annotations, and generate a Grok-Native Certified badge — on every push and pull request.</b>
+</p>
 
-# grok-install-action
+<p align="center">
+  <img src="https://readme-typing-svg.demolab.com?font=Space+Grotesk&weight=700&size=22&pause=1000&color=00E5FF&center=true&vCenter=true&width=900&lines=Composite+GitHub+Action+%E2%80%94+Zero+Setup;Inline+PR+Annotations+%26+Pinned+Comment;Auto-Generated+Certified+Badge;Supply-Chain+Pinned+CLI+Version" alt="typing" />
+</p>
 
-**Validate `.grok/` agents, run the safety scanner, post inline PR annotations, and generate a Grok-Native Certified badge — on every push and pull request.**
+<p align="center">
+  <a href="https://github.com/AgentMindCloud/grok-install-action/actions/workflows/test.yml"><img src="https://img.shields.io/github/actions/workflow/status/AgentMindCloud/grok-install-action/test.yml?branch=main&label=CI&style=for-the-badge&color=00E5FF&labelColor=0A0D14" /></a>
+  <a href="https://github.com/marketplace/actions/grokinstall-validate-scan"><img src="https://img.shields.io/badge/Marketplace%20Listed-7C3AED?style=for-the-badge&logo=github&logoColor=FFFFFF&labelColor=0A0D14" /></a>
+  <a href="https://github.com/AgentMindCloud/grok-install-action/releases"><img src="https://img.shields.io/github/v/release/AgentMindCloud/grok-install-action?style=for-the-badge&color=FF4FD8&logoColor=FFFFFF&labelColor=0A0D14" /></a>
+  <a href="./LICENSE"><img src="https://img.shields.io/badge/Apache%202.0-00D5FF?style=for-the-badge&logoColor=001018&labelColor=0A0D14" /></a>
+  <a href="https://nodejs.org/"><img src="https://img.shields.io/badge/Node%20%E2%89%A5%2020-9D4EDD?style=for-the-badge&logo=node.js&logoColor=FFFFFF&labelColor=0A0D14" /></a>
+  <a href="https://www.conventionalcommits.org/"><img src="https://img.shields.io/badge/Conventional%20Commits-5EF2FF?style=for-the-badge&logoColor=001018&labelColor=0A0D14" /></a>
+</p>
 
-<sub>Built for Grok on X · <a href="https://grokagents.dev">grokagents.dev</a></sub>
-
-<br /><br />
-
-<a href="https://grokagents.dev">
-  <img src="./docs/img/pr-comment-hero.png" alt="GrokInstall pinned PR comment with safety score, findings table, and inline annotations on the Files Changed tab" width="760" />
-</a>
-
-</div>
-
----
-
-## What it does
-
-A composite GitHub Action that wraps [`grok-install-cli`](https://github.com/AgentMindCloud/grok-install-cli) so every PR and push gets:
-
-- **Validate** — schema check against the 14 YAML specs
-- **Scan** — safety + permissions audit with a numeric score (0-100)
-- **Annotations** — inline `::error` / `::warning` on the Files Changed tab
-- **PR comment** — a single pinned comment updated in place (no spam)
-- **Badge** — brand-colored SVG committed to `/badges/grok-native-certified.svg` on `main`
-
-> Auto-Post-to-X is **deferred to v2**. This action does not post to X.
+<p align="center">
+  <a href="https://grokagents.dev">
+    <img src="./docs/img/pr-comment-hero.png" alt="GrokInstall pinned PR comment with safety score, findings table, and inline annotations on the Files Changed tab" width="760" />
+  </a>
+</p>
 
 ---
 
-## Quick start
+## ✦ What It Does
+
+<table>
+  <tr>
+    <td width="25%">
+      <h3>✅ Validate</h3>
+      <p>Schema check against the 14 YAML specs on every push.</p>
+    </td>
+    <td width="25%">
+      <h3>🛡️ Scan</h3>
+      <p>Safety + permissions audit with a numeric score (0–100).</p>
+    </td>
+    <td width="25%">
+      <h3>📝 Annotate</h3>
+      <p>Inline <code>::error</code> / <code>::warning</code> on the Files Changed tab.</p>
+    </td>
+    <td width="25%">
+      <h3>💬 Pin + Certify</h3>
+      <p>Single pinned PR comment (no spam) + brand-colored SVG badge.</p>
+    </td>
+  </tr>
+</table>
+
+> ⚠️ **Auto-Post-to-X is deferred to v2.** This action does not post to X.
+
+## ✦ Quick Start
 
 Drop this into `.github/workflows/grokinstall.yml`:
 
@@ -67,7 +85,7 @@ jobs:
       - uses: AgentMindCloud/grok-install-action@v1
 ```
 
-### Quick add (one-liner)
+### One-liner install
 
 ```bash
 mkdir -p .github/workflows && curl -fsSL \
@@ -75,50 +93,103 @@ mkdir -p .github/workflows && curl -fsSL \
   -o .github/workflows/grokinstall.yml
 ```
 
-More examples in [`workflows-examples/`](./workflows-examples):
-- [`basic.yml`](./workflows-examples/basic.yml) — minimal single-agent repo
-- [`matrix.yml`](./workflows-examples/matrix.yml) — multi-agent monorepo fan-out
-- [`release.yml`](./workflows-examples/release.yml) — gate on release tags
+<table>
+  <tr>
+    <td width="33%">
+      <h3>📄 basic.yml</h3>
+      <p>Minimal single-agent repo.</p>
+      <a href="./workflows-examples/basic.yml">Example →</a>
+    </td>
+    <td width="33%">
+      <h3>🧮 matrix.yml</h3>
+      <p>Multi-agent monorepo fan-out.</p>
+      <a href="./workflows-examples/matrix.yml">Example →</a>
+    </td>
+    <td width="33%">
+      <h3>🚀 release.yml</h3>
+      <p>Gate on release tags.</p>
+      <a href="./workflows-examples/release.yml">Example →</a>
+    </td>
+  </tr>
+</table>
 
----
+## ✦ How It Works
 
-## What's new in v1.0
+```mermaid
+flowchart LR
+    CHECKOUT["actions/checkout"] --> NODE["setup-node 20"]
+    NODE --> CLI["npm i -g grok-install-cli"]
+    CLI --> RUN["scripts/run.sh"]
+    RUN --> VAL["grok-install validate --json"]
+    RUN --> SCAN["grok-install scan --json"]
+    VAL --> REPORT["normalized report.json"]
+    SCAN --> REPORT
+    REPORT --> ANN["annotations.js · error / warning"]
+    REPORT --> COMMENT["comment.js · pinned PR comment"]
+    REPORT --> BADGE["badge.js · brand SVG"]
+    ANN --> SUMMARY["Job summary"]
+    COMMENT --> PR["PR thread"]
+    BADGE --> MAIN["badges/ on main"]
+```
 
-- **Marketplace launch.** Listed as `GrokInstall Validate & Scan` — see `marketplace.yml`.
-- **CLI version pinned.** `cli-version` now defaults to `2.14.0` (was `latest`) for supply-chain reproducibility. Rationale and override syntax in [`docs/cli-version-pinning.md`](./docs/cli-version-pinning.md).
-- **`visuals-preview` input (opt-in, default `false`).** When enabled on `cli-version >= 2.14.0`, the CLI renders an HTML preview and the URL is surfaced in the PR comment plus the new `visuals-preview-url` output. <!-- TODO: verify still supported — wiring declared in action.yml but scripts/run.sh does not forward --visuals-preview to the CLI nor set visuals-preview-url on $GITHUB_OUTPUT -->
-- **Release automation.** Tag-triggered `.github/workflows/release.yml` cuts a GitHub Release, copies notes from `CHANGELOG.md`, and force-moves the floating `v1` major-version tag.
-- **Community health files.** `CONTRIBUTING.md`, `CHANGELOG.md`, `CODE_OF_CONDUCT.md`, `CODEOWNERS`, `FUNDING.yml`, issue forms, and a PR template.
+The PR-comment marker is `<!-- grokinstall-action:pr-comment -->` — swap it per-agent if you want matrix jobs to post separate comments instead of fighting over one.
 
-> Auto-Post-to-X is still deferred to v2. This action does not post to X.
+**Pinned dependencies:** Node 20 · `@actions/core@1.10.1` · `@actions/github@6.0.0` · `@octokit/rest@20.1.1` · composite steps reference each script by absolute path under `${{ github.action_path }}`.
 
----
+## ✦ What's New in v1.0
 
-## Inputs
+<table>
+  <tr>
+    <td width="50%">
+      <h3>🛒 Marketplace Launch</h3>
+      <p>Listed as <b>GrokInstall Validate & Scan</b>. See <code>marketplace.yml</code>.</p>
+    </td>
+    <td width="50%">
+      <h3>📌 CLI Version Pinned</h3>
+      <p><code>cli-version</code> defaults to <code>2.14.0</code> (was <code>latest</code>) for supply-chain reproducibility. <a href="./docs/cli-version-pinning.md">Override syntax →</a></p>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <h3>🎨 visuals-preview Input</h3>
+      <p>Opt-in, default <code>false</code>. On <code>cli-version >= 2.14.0</code> the CLI renders an HTML preview, URL surfaced in PR comment + <code>visuals-preview-url</code> output.</p>
+    </td>
+    <td>
+      <h3>🏷️ Release Automation</h3>
+      <p>Tag-triggered <code>release.yml</code> cuts a GitHub Release from <code>CHANGELOG.md</code> and force-moves the floating <code>v1</code> major-version tag.</p>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">
+      <h3>📋 Community Health Files</h3>
+      <p><code>CONTRIBUTING.md</code>, <code>CHANGELOG.md</code>, <code>CODE_OF_CONDUCT.md</code>, <code>CODEOWNERS</code>, <code>FUNDING.yml</code>, issue forms, and a PR template.</p>
+    </td>
+  </tr>
+</table>
+
+## ✦ Inputs
 
 | Name | Default | Description |
 | --- | --- | --- |
 | `working-directory` | `.` | Path to the repo root containing `.grok/` (or a sub-directory for monorepos). |
 | `mode` | `strict` | `strict` fails the job on errors. `warn` annotates only, never fails. |
 | `cli-version` | `2.14.0` | `grok-install-cli` version to install (any npm dist-tag or semver). Floor: `>= 2.0.0`. See [`docs/cli-version-pinning.md`](./docs/cli-version-pinning.md). |
-| `visuals-preview` | `false` | Forward `--visuals-preview` to the CLI and surface the rendered URL. Requires `cli-version >= 2.14.0`. <!-- TODO: verify still supported --> |
+| `visuals-preview` | `false` | Forward `--visuals-preview` to the CLI and surface the rendered URL. Requires `cli-version >= 2.14.0`. |
 | `update-badge` | `true` | Generate `/badges/grok-native-certified.svg` and commit it on `main` pushes. |
 | `comment-on-pr` | `true` | Post / update a PR comment with the report. |
 | `github-token` | _(empty — falls back to `github.token`)_ | Token for PR comments + badge commit. Pass a PAT only if you need elevated scopes. |
 
-## Outputs
+## ✦ Outputs
 
 | Name | Description |
 | --- | --- |
 | `passed` | `true` when validate + scan both succeeded. |
-| `safety-score` | Numeric safety score 0-100. |
+| `safety-score` | Numeric safety score 0–100. |
 | `report-path` | Absolute path to the generated `report.json`. |
 | `badge-path` | Repo-relative path to the SVG badge (when `update-badge: true`). |
-| `visuals-preview-url` | URL of the rendered visuals preview (when `visuals-preview: true` on `cli-version >= 2.14.0`). Empty string otherwise. <!-- TODO: verify still supported --> |
+| `visuals-preview-url` | URL of the rendered visuals preview (when `visuals-preview: true` on `cli-version >= 2.14.0`). Empty string otherwise. |
 
----
-
-## Embed the badge
+## ✦ Embed the Badge
 
 After the first run on `main`, embed the badge in your README:
 
@@ -129,52 +200,20 @@ After the first run on `main`, embed the badge in your README:
 Or use a shields.io endpoint (auto-updates from your last run):
 
 ```markdown
-![Grok-Native](https://img.shields.io/badge/Grok--Native-certified-00FF9D?style=for-the-badge&labelColor=0A0A0A)
+![Grok-Native](https://img.shields.io/badge/Grok--Native-certified-00E5FF?style=for-the-badge&labelColor=0A0D14)
 ```
 
-Brand tokens for custom badges:
+### Brand tokens for custom badges
 
-| Token | Value |
-| --- | --- |
-| Background | `#0A0A0A` |
-| Primary neon (cyan) | `#00F0FF` |
-| Success neon (green) | `#00FF9D` |
-| Danger | `#FF2D55` |
+| Token | Value | Preview |
+|---|---|---|
+| Background | `#0A0D14` | <img src="https://img.shields.io/badge/BG-0A0D14-0A0D14?style=for-the-badge&labelColor=0A0D14" /> |
+| Primary (cyan) | `#00E5FF` | <img src="https://img.shields.io/badge/Cyan-00E5FF-00E5FF?style=for-the-badge&labelColor=0A0D14" /> |
+| Accent (violet) | `#7C3AED` | <img src="https://img.shields.io/badge/Violet-7C3AED-7C3AED?style=for-the-badge&labelColor=0A0D14" /> |
+| Highlight (magenta) | `#FF4FD8` | <img src="https://img.shields.io/badge/Magenta-FF4FD8-FF4FD8?style=for-the-badge&labelColor=0A0D14" /> |
+| Danger | `#FF2D55` | <img src="https://img.shields.io/badge/Danger-FF2D55-FF2D55?style=for-the-badge&labelColor=0A0D14" /> |
 
----
-
-## How it works
-
-```
-┌──────────────────┐    ┌──────────────┐    ┌─────────────────────┐
-│ actions/checkout │──▶ │ setup-node@20│──▶ │ npm i -g grok-      │
-└──────────────────┘    └──────────────┘    │ install-cli@<ver>   │
-                                            └──────────┬──────────┘
-                                                       ▼
-                              ┌────────────────────────────────────────────┐
-                              │ scripts/run.sh                             │
-                              │   grok-install validate --json             │
-                              │   grok-install scan --json                 │
-                              │   → normalized report.json                 │
-                              └──────────┬─────────────────────────────────┘
-                                         ▼
-                ┌────────────────────────┼────────────────────────┐
-                ▼                        ▼                        ▼
-      scripts/annotations.js    scripts/comment.js      scripts/badge.js
-      ::error / ::warning       upsert PR comment       brand-colored SVG
-      + job summary             (hidden marker)         (green/cyan/red)
-```
-
-The PR-comment marker is `<!-- grokinstall-action:pr-comment -->` — swap it per-agent if you want matrix jobs to post separate comments instead of fighting over one.
-
-The action pins:
-- Node **20**
-- `@actions/core@1.10.1`, `@actions/github@6.0.0`, `@octokit/rest@20.1.1`
-- Composite action steps reference each script by absolute path under `${{ github.action_path }}`
-
----
-
-## Permissions
+## ✦ Permissions
 
 Minimum token scopes — see [SECURITY.md](./SECURITY.md) for detail.
 
@@ -185,9 +224,7 @@ Minimum token scopes — see [SECURITY.md](./SECURITY.md) for detail.
 | `pull-requests: write` | post / update PR comment | `comment-on-pr: true` |
 | `checks: write` | render `::error` / `::warning` annotations | always |
 
----
-
-## Local development
+## ✦ Local Development
 
 ```bash
 npm ci
@@ -206,12 +243,56 @@ CI wires the same flow end-to-end via [`.github/workflows/test.yml`](./.github/w
 
 See [`CONTRIBUTING.md`](./CONTRIBUTING.md) for PR guidelines and [`CHANGELOG.md`](./CHANGELOG.md) for release history.
 
----
+## ✦ Sibling Repos
 
-<div align="center">
+<table>
+  <tr>
+    <td width="33%">
+      <h3>📦 grok-install</h3>
+      <p>The universal spec this action validates.</p>
+      <a href="https://github.com/agentmindcloud/grok-install">Repository →</a>
+    </td>
+    <td width="33%">
+      <h3>⚙️ grok-install-cli</h3>
+      <p>The CLI this action wraps. Shipped together.</p>
+      <a href="https://github.com/agentmindcloud/grok-install-cli">Repository →</a>
+    </td>
+    <td width="33%">
+      <h3>🌟 awesome-grok-agents</h3>
+      <p>10 certified templates you can validate with this action.</p>
+      <a href="https://github.com/agentmindcloud/awesome-grok-agents">Repository →</a>
+    </td>
+  </tr>
+</table>
 
-<sub>Powered by <b>GrokInstall</b> · <a href="https://grokagents.dev">grokagents.dev</a></sub>
+## ✦ Connect
 
-<sub><i>GrokInstall is an independent community project. Not affiliated with xAI, Grok, or X.</i></sub>
+<p align="center">
+  <a href="https://github.com/agentmindcloud">
+    <img src="https://img.shields.io/badge/GitHub-00E5FF?style=for-the-badge&logo=github&logoColor=001018&labelColor=0A0D14" />
+  </a>
+  <a href="https://x.com/JanSol0s">
+    <img src="https://img.shields.io/badge/X-7C3AED?style=for-the-badge&logo=x&logoColor=FFFFFF&labelColor=0A0D14" />
+  </a>
+  <a href="https://grokagents.dev">
+    <img src="https://img.shields.io/badge/grokagents.dev-FF4FD8?style=for-the-badge&logoColor=FFFFFF&labelColor=0A0D14" />
+  </a>
+</p>
 
-</div>
+## ✦ License
+
+Apache 2.0. See [LICENSE](./LICENSE).
+
+<br/>
+
+<p align="center">
+  <sub>Powered by <b>GrokInstall</b> · <a href="https://grokagents.dev">grokagents.dev</a></sub>
+</p>
+
+<p align="center">
+  <sub><i>GrokInstall is an independent community project. Not affiliated with xAI, Grok, or X.</i></sub>
+</p>
+
+<p align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&height=120&section=footer&color=0:00E5FF,50:7C3AED,100:FF4FD8" width="100%" />
+</p>
