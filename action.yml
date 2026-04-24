@@ -78,7 +78,13 @@ runs:
 
     - name: Install grok-install-cli
       shell: bash
-      run: npm install -g grok-install-cli@${{ inputs.cli-version }}
+      # Tolerate install failure so `run.sh` can still produce a structured
+      # report.json that surfaces the missing CLI as a finding. Strict mode
+      # will still fail at the final enforcement step; warn mode keeps going.
+      run: |
+        if ! npm install -g grok-install-cli@${{ inputs.cli-version }}; then
+          echo "::warning title=GrokInstall::Could not install grok-install-cli@${{ inputs.cli-version }} from the npm registry. The action will continue and surface this as a finding in the report; in strict mode the run will still fail at the final enforcement step."
+        fi
 
     - name: Run validate + scan
       id: run

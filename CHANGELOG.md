@@ -19,6 +19,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Load-time template error `Unrecognized named-value: 'github'` on `action.yml`.
+- `Install grok-install-cli` step no longer aborts the composite when the
+  requested `cli-version` is unavailable on the npm registry. The install
+  failure is logged as a workflow `::warning`; `scripts/run.sh` still produces
+  a structured `report.json` that flags the missing binary, and strict mode
+  still fails at the final enforcement step.
 
 ## [1.0.0] - 2026-04-21
 
