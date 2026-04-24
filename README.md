@@ -86,7 +86,7 @@ More examples in [`workflows-examples/`](./workflows-examples):
 
 - **Marketplace launch.** Listed as `GrokInstall Validate & Scan` — see `marketplace.yml`.
 - **CLI version pinned.** `cli-version` now defaults to `2.14.0` (was `latest`) for supply-chain reproducibility. Rationale and override syntax in [`docs/cli-version-pinning.md`](./docs/cli-version-pinning.md).
-- **`visuals-preview` input (opt-in, default `false`).** When enabled on `cli-version >= 2.14.0`, the CLI renders an HTML preview and the URL is surfaced in the PR comment plus the new `visuals-preview-url` output.
+- **`visuals-preview` input (opt-in, default `false`).** When enabled on `cli-version >= 2.14.0`, the CLI renders an HTML preview and the URL is surfaced in the PR comment plus the new `visuals-preview-url` output. <!-- TODO: verify still supported — wiring declared in action.yml but scripts/run.sh does not forward --visuals-preview to the CLI nor set visuals-preview-url on $GITHUB_OUTPUT -->
 - **Release automation.** Tag-triggered `.github/workflows/release.yml` cuts a GitHub Release, copies notes from `CHANGELOG.md`, and force-moves the floating `v1` major-version tag.
 - **Community health files.** `CONTRIBUTING.md`, `CHANGELOG.md`, `CODE_OF_CONDUCT.md`, `CODEOWNERS`, `FUNDING.yml`, issue forms, and a PR template.
 
@@ -100,8 +100,8 @@ More examples in [`workflows-examples/`](./workflows-examples):
 | --- | --- | --- |
 | `working-directory` | `.` | Path to the repo root containing `.grok/` (or a sub-directory for monorepos). |
 | `mode` | `strict` | `strict` fails the job on errors. `warn` annotates only, never fails. |
-| `cli-version` | `2.14.0` | `grok-install-cli` version to install (any npm dist-tag or semver). See [`docs/cli-version-pinning.md`](./docs/cli-version-pinning.md). |
-| `visuals-preview` | `false` | Forward `--visuals-preview` to the CLI and surface the rendered URL. Requires `cli-version >= 2.14.0`. |
+| `cli-version` | `2.14.0` | `grok-install-cli` version to install (any npm dist-tag or semver). Floor: `>= 2.0.0`. See [`docs/cli-version-pinning.md`](./docs/cli-version-pinning.md). |
+| `visuals-preview` | `false` | Forward `--visuals-preview` to the CLI and surface the rendered URL. Requires `cli-version >= 2.14.0`. <!-- TODO: verify still supported --> |
 | `update-badge` | `true` | Generate `/badges/grok-native-certified.svg` and commit it on `main` pushes. |
 | `comment-on-pr` | `true` | Post / update a PR comment with the report. |
 | `github-token` | _(empty — falls back to `github.token`)_ | Token for PR comments + badge commit. Pass a PAT only if you need elevated scopes. |
@@ -114,7 +114,7 @@ More examples in [`workflows-examples/`](./workflows-examples):
 | `safety-score` | Numeric safety score 0-100. |
 | `report-path` | Absolute path to the generated `report.json`. |
 | `badge-path` | Repo-relative path to the SVG badge (when `update-badge: true`). |
-| `visuals-preview-url` | URL of the rendered visuals preview (when `visuals-preview: true` on `cli-version >= 2.14.0`). Empty string otherwise. |
+| `visuals-preview-url` | URL of the rendered visuals preview (when `visuals-preview: true` on `cli-version >= 2.14.0`). Empty string otherwise. <!-- TODO: verify still supported --> |
 
 ---
 
@@ -165,6 +165,8 @@ Brand tokens for custom badges:
       + job summary             (hidden marker)         (green/cyan/red)
 ```
 
+The PR-comment marker is `<!-- grokinstall-action:pr-comment -->` — swap it per-agent if you want matrix jobs to post separate comments instead of fighting over one.
+
 The action pins:
 - Node **20**
 - `@actions/core@1.10.1`, `@actions/github@6.0.0`, `@octokit/rest@20.1.1`
@@ -199,6 +201,10 @@ Integration test (what CI runs):
 grok-install validate tests/sample-agent
 grok-install scan     tests/sample-agent
 ```
+
+CI wires the same flow end-to-end via [`.github/workflows/test.yml`](./.github/workflows/test.yml), invoking the action against `tests/sample-agent` in `mode: warn`.
+
+See [`CONTRIBUTING.md`](./CONTRIBUTING.md) for PR guidelines and [`CHANGELOG.md`](./CHANGELOG.md) for release history.
 
 ---
 
