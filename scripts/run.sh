@@ -6,11 +6,20 @@ set -uo pipefail
 
 WORKDIR="${INPUT_WORKING_DIRECTORY:-.}"
 MODE="${INPUT_MODE:-strict}"
+VISUALS_PREVIEW="${INPUT_VISUALS_PREVIEW:-false}"
 REPORT="$(mktemp -t grok-report.XXXXXX.json)"
 VALIDATE_RAW="$(mktemp -t grok-validate.XXXXXX.json)"
 SCAN_RAW="$(mktemp -t grok-scan.XXXXXX.json)"
 
 cd "$WORKDIR"
+
+# Forward --visuals-preview only when explicitly opted in. Older CLIs (<2.14)
+# treat unknown flags as a hard error, so we keep the flag off unless the
+# consumer set the input.
+preview_args=()
+if [ "${VISUALS_PREVIEW,,}" = "true" ]; then
+  preview_args+=(--visuals-preview)
+fi
 
 echo "::group::grok-install-cli version"
 grok-install --version || true
@@ -18,13 +27,13 @@ echo "::endgroup::"
 
 echo "::group::grok-install validate"
 validate_rc=0
-grok-install validate --json > "$VALIDATE_RAW" 2>&1 || validate_rc=$?
+grok-install validate --json "${preview_args[@]}" > "$VALIDATE_RAW" 2>&1 || validate_rc=$?
 cat "$VALIDATE_RAW"
 echo "::endgroup::"
 
 echo "::group::grok-install scan"
 scan_rc=0
-grok-install scan --json > "$SCAN_RAW" 2>&1 || scan_rc=$?
+grok-install scan --json "${preview_args[@]}" > "$SCAN_RAW" 2>&1 || scan_rc=$?
 cat "$SCAN_RAW"
 echo "::endgroup::"
 
@@ -84,6 +93,22 @@ const safetyScore = Number(
   (scan && (scan.safetyScore ?? scan.score ?? scan.summary?.score)) ?? (sRc === 0 ? 100 : 0)
 ) || 0;
 
+const pickPreviewUrl = (payload) => {
+  if (!payload || typeof payload !== 'object') return '';
+  const candidates = [
+    payload.visualsPreviewUrl,
+    payload.visualsPreview?.url,
+    payload.visuals?.previewUrl,
+    payload.preview?.url,
+    payload.summary?.visualsPreviewUrl
+  ];
+  for (const c of candidates) {
+    if (typeof c === 'string' && c.length) return c;
+  }
+  return '';
+};
+const visualsPreviewUrl = pickPreviewUrl(scan) || pickPreviewUrl(validate);
+
 const hasErrors = findings.some((f) => f.severity === 'error');
 const passed = vRc === 0 && sRc === 0 && !hasErrors;
 
@@ -94,6 +119,7 @@ const report = {
     scanExit: sRc
   },
   safetyScore,
+  visualsPreviewUrl,
   passed,
   counts: {
     error:   findings.filter((f) => f.severity === 'error').length,
@@ -110,11 +136,13 @@ NODE
 # Surface outputs to later steps.
 PASSED=$(node -e "console.log(require('$REPORT').passed)")
 SCORE=$(node -e "console.log(require('$REPORT').safetyScore)")
+PREVIEW_URL=$(node -e "console.log(require('$REPORT').visualsPreviewUrl || '')")
 
 {
   echo "report-path=$REPORT"
   echo "passed=$PASSED"
   echo "safety-score=$SCORE"
+  echo "visuals-preview-url=$PREVIEW_URL"
 } >> "$GITHUB_OUTPUT"
 
 echo "::notice title=GrokInstall::passed=$PASSED safety-score=$SCORE mode=$MODE"

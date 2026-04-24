@@ -20,17 +20,10 @@
 
 <p align="center">
   <a href="https://github.com/AgentMindCloud/grok-install-action/actions/workflows/test.yml"><img src="https://img.shields.io/github/actions/workflow/status/AgentMindCloud/grok-install-action/test.yml?branch=main&label=CI&style=for-the-badge&color=00E5FF&labelColor=0A0D14" /></a>
-  <a href="https://github.com/marketplace/actions/grokinstall-validate-scan"><img src="https://img.shields.io/badge/Marketplace%20Listed-7C3AED?style=for-the-badge&logo=github&logoColor=FFFFFF&labelColor=0A0D14" /></a>
   <a href="https://github.com/AgentMindCloud/grok-install-action/releases"><img src="https://img.shields.io/github/v/release/AgentMindCloud/grok-install-action?style=for-the-badge&color=FF4FD8&logoColor=FFFFFF&labelColor=0A0D14" /></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/Apache%202.0-00D5FF?style=for-the-badge&logoColor=001018&labelColor=0A0D14" /></a>
   <a href="https://nodejs.org/"><img src="https://img.shields.io/badge/Node%20%E2%89%A5%2020-9D4EDD?style=for-the-badge&logo=node.js&logoColor=FFFFFF&labelColor=0A0D14" /></a>
   <a href="https://www.conventionalcommits.org/"><img src="https://img.shields.io/badge/Conventional%20Commits-5EF2FF?style=for-the-badge&logoColor=001018&labelColor=0A0D14" /></a>
-</p>
-
-<p align="center">
-  <a href="https://grokagents.dev">
-    <img src="./docs/img/pr-comment-hero.png" alt="GrokInstall pinned PR comment with safety score, findings table, and inline annotations on the Files Changed tab" width="760" />
-  </a>
 </p>
 
 ---
@@ -134,15 +127,15 @@ flowchart LR
 
 The PR-comment marker is `<!-- grokinstall-action:pr-comment -->` — swap it per-agent if you want matrix jobs to post separate comments instead of fighting over one.
 
-**Pinned dependencies:** Node 20 · `@actions/core@1.10.1` · `@actions/github@6.0.0` · `@octokit/rest@20.1.1` · composite steps reference each script by absolute path under `${{ github.action_path }}`.
+**Pinned dependencies:** Node 20 · `@actions/core@1.11.1` · `@actions/github@6.0.1` · `@octokit/rest@20.1.2` · composite steps reference each script by absolute path under `${{ github.action_path }}`.
 
 ## ✦ What's New in v1.0
 
 <table>
   <tr>
     <td width="50%">
-      <h3>🛒 Marketplace Launch</h3>
-      <p>Listed as <b>GrokInstall Validate & Scan</b>. See <code>marketplace.yml</code>.</p>
+      <h3>🛒 Marketplace Ready</h3>
+      <p>Listing metadata published in <code>marketplace.yml</code>; ready to be linked once the GitHub Marketplace listing is live.</p>
     </td>
     <td width="50%">
       <h3>📌 CLI Version Pinned</h3>

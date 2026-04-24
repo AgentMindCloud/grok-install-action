@@ -55,6 +55,7 @@ function renderBody(report) {
   const score = report.safetyScore ?? 0;
   const counts = report.counts || {};
   const findings = Array.isArray(report.findings) ? report.findings : [];
+  const previewUrl = (process.env.VISUALS_PREVIEW_URL || report.visualsPreviewUrl || '').trim();
 
   const statusBadge = passed
     ? 'https://img.shields.io/badge/GrokInstall-passed-00FF9D?style=for-the-badge&labelColor=0A0A0A'
@@ -80,6 +81,10 @@ function renderBody(report) {
     ? `\n\n_Showing first 50 of ${findings.length} findings. See the Actions run for the full list._`
     : '';
 
+  const previewLine = previewUrl
+    ? `\n🎨 **Visuals preview:** [${previewUrl}](${previewUrl})\n`
+    : '';
+
   return [
     MARKER,
     `<h3>GrokInstall Report</h3>`,
@@ -87,7 +92,7 @@ function renderBody(report) {
     `<img src="${statusBadge}" alt="status" />&nbsp;<img src="${scoreBadge}" alt="safety score" />`,
     '',
     `**${counts.error || 0}** errors · **${counts.warning || 0}** warnings · **${counts.info || 0}** info`,
-    '',
+    previewLine,
     table + truncated,
     '',
     '<sub>Powered by <b>GrokInstall</b> · <a href="https://grokagents.dev">grokagents.dev</a> · <i>GrokInstall is an independent community project. Not affiliated with xAI, Grok, or X.</i></sub>'
