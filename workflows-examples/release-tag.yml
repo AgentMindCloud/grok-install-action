@@ -1,0 +1,24 @@
+name: Grok Install (release)
+on:
+  push:
+    tags: ['v*']
+
+jobs:
+  certify:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - id: certify
+        uses: AgentMindCloud/grok-install-action@v1
+        with:
+          fail-on: error
+          comment: 'false'
+      - name: Upload certification artifact
+        if: steps.certify.outputs.certified == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: grok-certification-${{ github.ref_name }}
+          path: .github/badges/grok-install.svg
+          if-no-files-found: error

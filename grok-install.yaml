@@ -1,0 +1,9 @@
+# Self-describing manifest for grok-install-action itself.
+# Used by .github/workflows/self-certify.yml to dogfood the action
+# against its own repo on every push to the default branch.
+name: grok-install-action
+version: 1.0.0
+runtime:
+  platform: grokagents.dev
+  entry: dist/index.js
+description: Validate and certify Grok-native agent manifests in GitHub CI.

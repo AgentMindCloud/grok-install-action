@@ -1,0 +1,6 @@
+name: sample-agent-rl
+version: 0.1.0
+runtime:
+  platform: grokagents.dev
+  entry: ./agent.ts
+description: Rate-limit-only failing fixture for unit-test coverage.

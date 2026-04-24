@@ -1,0 +1,27 @@
+name: Review + Certify
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  review-and-certify:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Claude Code review
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            Review this PR focusing on the manifests at
+            grok-install.yaml and capabilities.yaml. Flag anything
+            that drifts from our Grok-native install conventions.
+
+      - name: Grok-Native certify
+        uses: AgentMindCloud/grok-install-action@v1
+        with:
+          fail-on: error

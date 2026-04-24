@@ -1,0 +1,6 @@
+name: sample-agent
+version: 0.1.0
+runtime:
+  platform: grokagents.dev
+  entry: ./agent.ts
+description: Passing sample agent used by the validator test suite.

@@ -1,0 +1,29 @@
+/* grok-install brand tokens — locked. Never approximate these hex values. */
+:root {
+  --gi-bg: #0A0A0A;
+  --gi-cyan: #00F0FF;
+  --gi-green: #00FF9D;
+  --gi-danger: #FF2D55;
+
+  /* Alpha variants (for glassmorphism + borders) */
+  --gi-cyan-15: rgba(0, 240, 255, 0.15);
+  --gi-cyan-40: rgba(0, 240, 255, 0.40);
+  --gi-white-04: rgba(255, 255, 255, 0.04);
+  --gi-white-08: rgba(255, 255, 255, 0.08);
+  --gi-green-15: rgba(0, 255, 157, 0.15);
+  --gi-danger-15: rgba(255, 45, 85, 0.15);
+
+  /* Radii */
+  --gi-radius-chip: 8px;
+  --gi-radius-button: 16px;
+  --gi-radius-card: 24px;
+
+  /* Typography */
+  --gi-font-display: 'Space Grotesk', system-ui, sans-serif;
+  --gi-font-body: 'Inter', system-ui, sans-serif;
+  --gi-font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  /* Effects */
+  --gi-blur-glass: 20px;
+  --gi-tracking-wordmark: 3.5px;
+}

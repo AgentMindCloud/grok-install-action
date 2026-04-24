@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-label="Grok-Native Certified">
+  <rect width="256" height="256" fill="#0A0A0A" rx="48"/>
+  <g transform="translate(128 128)">
+    <path d="M 0 -80 L 72 -56 L 72 24 Q 72 76 0 104 Q -72 76 -72 24 L -72 -56 Z"
+          fill="none" stroke="#00F0FF" stroke-width="4"/>
+    <g fill="none" stroke="#00F0FF" stroke-width="4" stroke-linecap="round">
+      <path d="M 28 -24 A 36 36 0 1 0 28 24 L 12 24 L 12 0" opacity="0.9"/>
+      <circle r="4" cx="0" cy="0" fill="#00F0FF" stroke="none" opacity="0.7"/>
+    </g>
+    <g transform="translate(44 -44)">
+      <circle r="18" fill="#0A0A0A" stroke="#00FF9D" stroke-width="3"/>
+      <path d="M -8 0 L -2 8 L 10 -8" fill="none" stroke="#00FF9D" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+  </g>
+</svg>

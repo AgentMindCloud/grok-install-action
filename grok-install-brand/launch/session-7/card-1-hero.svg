@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675">
+  <defs>
+    <linearGradient id="c1-grad" x1="0" x2="1"><stop offset="0" stop-color="#00F0FF"/><stop offset="1" stop-color="#FFFFFF"/></linearGradient>
+    <filter id="c1-neon"><feGaussianBlur stdDeviation="8"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="1200" height="675" fill="#0A0A0A"/>
+  <g fill="none" stroke="#00F0FF" stroke-width="1.5" stroke-linecap="round" opacity="0.25">
+    <path d="M0 180 L300 180 L340 140 L860 140 L900 180 L1200 180"/>
+    <path d="M0 510 L260 510 L300 470 L820 470 L860 510 L1200 510"/>
+    <path d="M0 340 L200 340 L240 380 L960 380 L1000 340 L1200 340"/>
+  </g>
+  <text x="80" y="270" font-family="JetBrains Mono, monospace" font-size="18" letter-spacing="3" fill="#00F0FF" opacity="0.7">GROK-NATIVE · CI CERTIFICATION</text>
+  <g filter="url(#c1-neon)">
+    <text x="80" y="400" font-family="Space Grotesk, Inter, sans-serif" font-weight="700" font-size="96" letter-spacing="3.5" fill="url(#c1-grad)">GROK-INSTALL-ACTION</text>
+  </g>
+  <text x="80" y="470" font-family="Inter, sans-serif" font-size="28" fill="#E5E5E5" opacity="0.85">is live.</text>
+  <text x="80" y="540" font-family="Inter, sans-serif" font-size="20" fill="#E5E5E5" opacity="0.7">One GitHub Marketplace action. Validate, scan, certify, badge.</text>
+  <g transform="translate(1060 560)">
+    <path d="M 0 -40 L 36 -26 L 36 14 Q 36 42 0 56 Q -36 42 -36 14 L -36 -26 Z" fill="none" stroke="#00F0FF" stroke-width="2"/>
+    <path d="M -12 6 L -3 15 L 15 -8" fill="none" stroke="#00FF9D" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text x="600" y="650" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-style="italic" fill="#E5E5E5" opacity="0.5">This certification is advisory. It does not guarantee runtime safety of third-party agent code.</text>
+</svg>

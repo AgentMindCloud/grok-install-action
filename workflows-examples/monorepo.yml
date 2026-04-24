@@ -1,0 +1,21 @@
+name: Grok Install (monorepo)
+on: [push, pull_request]
+
+jobs:
+  certify:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        agent:
+          - agents/viral-thread-architect
+          - agents/reply-guy-bot
+          - agents/raw-sentiment-parser
+    steps:
+      - uses: actions/checkout@v4
+      - name: Certify ${{ matrix.agent }}
+        uses: AgentMindCloud/grok-install-action@v1
+        with:
+          manifest-path: ${{ matrix.agent }}/grok-install.yaml
+          capabilities-path: ${{ matrix.agent }}/capabilities.yaml
+          badge-path: ${{ matrix.agent }}/.grok-install-badge.svg

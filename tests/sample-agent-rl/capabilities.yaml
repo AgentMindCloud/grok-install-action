@@ -1,0 +1,8 @@
+# capabilities for sample-agent-rl
+profile: standard
+limits:
+  max_mentions_per_day: 200
+  max_dms_per_day: 50
+rate:
+  max_replies_per_hour: 999
+  max_posts_per_hour: 30

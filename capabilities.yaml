@@ -1,0 +1,8 @@
+# Self-describing capabilities for grok-install-action.
+profile: standard
+limits:
+  max_mentions_per_day: 0
+  max_dms_per_day: 0
+rate:
+  max_replies_per_hour: 0
+  max_posts_per_hour: 0
