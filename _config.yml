@@ -1,0 +1,28 @@
+title: grok-install-action
+description: Composite GitHub Action — validate .grok/ agents, run the safety scanner, annotate PRs, and generate a Grok-Native Certified badge on every push.
+url: https://agentmindcloud.github.io
+baseurl: /grok-install-action
+twitter:
+  username: agentmindcloud
+  card: summary_large_image
+social:
+  name: AgentMindCloud
+  links:
+    - https://github.com/AgentMindCloud
+plugins:
+  - jekyll-seo-tag
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
+      image: /docs/posters/og-default.png
+exclude:
+  - scripts/
+  - schemas/
+  - tests/
+  - dist/
+  - src/
+  - node_modules/
+  - "*.lock"
+  - .github/

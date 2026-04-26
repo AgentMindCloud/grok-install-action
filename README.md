@@ -1,3 +1,9 @@
+---
+title: grok-install-action
+description: Composite GitHub Action — validate .grok/ agents, run the safety scanner, annotate PRs, and generate a Grok-Native Certified badge on every push.
+image: /docs/posters/og-default.png
+---
+
 <!-- NEON / CYBERPUNK REPO TEMPLATE · GROK-INSTALL-ACTION -->
 
 <p align="center">
