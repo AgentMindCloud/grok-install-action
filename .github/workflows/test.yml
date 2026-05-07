@@ -1,6 +1,9 @@
-# Self-test: runs unit tests, then invokes this action against tests/sample-agent
-# to prove it wires up end-to-end. Does not commit the badge (update-badge:false)
-# because this runs on the action repo itself, not on a consumer repo.
+# Self-test:
+#   1. unit         — runs scripts/* against fixture reports.
+#   2. examples     — parses every workflows-examples/*.yml and asserts that
+#                     each `with:` map only references real action.yml inputs.
+#   3. integration  — invokes the action against each tests/sample-agent* dir
+#                     in mode: warn so the self-test never fails on missing CLI.
 name: test
 
 on:
@@ -27,16 +30,41 @@ jobs:
 
       - run: npm test
 
-  integration:
+  examples:
     needs: unit
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Run action against sample agent
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install js-yaml for parsing
+        run: npm install --no-save --no-audit --no-fund js-yaml@4.1.0
+
+      - name: Lint workflows-examples against action.yml inputs
+        run: node scripts/check-examples.js
+
+  integration:
+    needs: unit
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        sample:
+          - tests/sample-agent
+          - tests/sample-agent-pass
+          - tests/sample-agent-rl
+    name: integration (${{ matrix.sample }})
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run action against ${{ matrix.sample }}
         uses: ./
         with:
-          working-directory: tests/sample-agent
-          mode: warn                     # sample is intentionally minimal — don't fail self-test
+          working-directory: ${{ matrix.sample }}
+          mode: warn                     # samples are intentionally minimal — don't fail self-test
+          cli-version: "2.14.0"
           update-badge: false
           comment-on-pr: false

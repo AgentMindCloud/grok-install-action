@@ -9,6 +9,6 @@ npm-debug.log*
 /tmp-badge/
 /tmp/
 
-# Python (scripts/annotate.py)
+# Python
 __pycache__/
 *.pyc

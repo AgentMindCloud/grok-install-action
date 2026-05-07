@@ -8,11 +8,12 @@ or other liability, whether in an action of contract, tort, or otherwise,
 arising from, out of, or in connection with the action or the use or other
 dealings in it.
 
-The action installs `grok-install-cli` from PyPI at runtime and executes it
-against files in the repository it is invoked on. You are responsible for
-reviewing the CLI's behavior and for the security posture of the workflows
-that consume this action. Pin `cli-version` in production workflows to avoid
-unexpected changes from upstream releases.
+The action installs the [`grok-install`](https://pypi.org/project/grok-install/)
+package from PyPI at runtime via `pip install` and executes it against files
+in the repository it is invoked on. You are responsible for reviewing the
+CLI's behavior and for the security posture of the workflows that consume
+this action. Pin `cli-version` in production workflows to avoid unexpected
+changes from upstream releases.
 
 This project is not affiliated with, endorsed by, or sponsored by GitHub, xAI,
 or any third party referenced in documentation.

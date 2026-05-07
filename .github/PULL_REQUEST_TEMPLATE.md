@@ -32,6 +32,6 @@ Closes #
 - [ ] I updated the inputs/outputs tables in `action.yml` if the surface changed
 - [ ] I updated `workflows-examples/` if a default consumer pattern changed
 - [ ] No new runtime npm dependencies were added (or I explained why one is necessary)
-- [ ] I did **not** introduce any network calls outside `grok-install-cli` and the GitHub API
+- [ ] I did **not** introduce any network calls outside the `grok-install` CLI and the GitHub API
 - [ ] I am not adding Auto-Post-to-X behavior (deferred to v2)
 - [ ] I agree to license my contribution under Apache-2.0 (same as the project)

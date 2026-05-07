@@ -17,9 +17,10 @@ inputs:
     default: 'strict'
   cli-version:
     description: >
-      Version of grok-install-cli to install. Accepts any npm dist-tag or semver
-      (e.g. "2.14.0", "latest", "2"). Pinned to an exact version by default for
-      supply-chain reproducibility — see docs/cli-version-pinning.md.
+      Version of the `grok-install` PyPI package to install. Accepts any
+      PEP 440 specifier (e.g. "2.14.0", "==2.14.0", ">=2.14,<3"). Pinned to
+      an exact version by default for supply-chain reproducibility — see
+      docs/cli-version-pinning.md.
     required: false
     default: '2.14.0'
   visuals-preview:
@@ -71,12 +72,17 @@ runs:
       with:
         node-version: '20'
 
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
     - name: Install action dependencies
       shell: bash
       working-directory: ${{ github.action_path }}
       run: npm ci --omit=dev --no-audit --no-fund
 
-    - name: Install grok-install-cli
+    - name: Install grok-install (PyPI)
       shell: bash
       # Tolerate install failure so `run.sh` can still produce a structured
       # report.json that surfaces the missing CLI as a finding. Strict mode
@@ -84,8 +90,14 @@ runs:
       env:
         CLI_VERSION: ${{ inputs.cli-version }}
       run: |
-        if ! npm install -g "grok-install-cli@${CLI_VERSION}"; then
-          echo "::warning title=GrokInstall::Could not install grok-install-cli@${CLI_VERSION} from the npm registry. The action will continue and surface this as a finding in the report; in strict mode the run will still fail at the final enforcement step."
+        # Bare versions like "2.14.0" become "==2.14.0"; anything that already
+        # starts with a PEP 440 operator (==, >=, <, ~=, !=) is passed through.
+        case "${CLI_VERSION}" in
+          ==*|>=*|>*|<=*|<*|~=*|!=*) SPEC="grok-install${CLI_VERSION}" ;;
+          *)                          SPEC="grok-install==${CLI_VERSION}" ;;
+        esac
+        if ! python -m pip install --disable-pip-version-check "${SPEC}"; then
+          echo "::warning title=GrokInstall::Could not install ${SPEC} from PyPI. The action will continue and surface this as a finding in the report; in strict mode the run will still fail at the final enforcement step."
         fi
 
     - name: Run validate + scan
@@ -95,7 +107,6 @@ runs:
         INPUT_WORKING_DIRECTORY: ${{ inputs.working-directory }}
         INPUT_MODE: ${{ inputs.mode }}
         INPUT_VISUALS_PREVIEW: ${{ inputs.visuals-preview }}
-        ACTION_PATH: ${{ github.action_path }}
       run: bash "${{ github.action_path }}/scripts/run.sh"
 
     - name: Write GitHub annotations

@@ -1,6 +1,6 @@
 {
   "name": "grok-install-action",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "description": "Composite GitHub Action — validate .grok/ agents, run the safety scanner, annotate PRs, and generate Grok-Native Certified badges.",
   "homepage": "https://grokagents.dev",

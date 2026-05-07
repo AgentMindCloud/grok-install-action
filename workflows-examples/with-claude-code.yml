@@ -1,14 +1,19 @@
+# with-claude-code.yml — pair human-style code review (Claude) with
+# machine-grade manifest certification (this action) on every PR.
 name: Review + Certify
+
 on:
   pull_request:
     types: [opened, synchronize, reopened]
 
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+
 jobs:
   review-and-certify:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
     steps:
       - uses: actions/checkout@v4
 
@@ -24,4 +29,7 @@ jobs:
       - name: Grok-Native certify
         uses: AgentMindCloud/grok-install-action@v1
         with:
-          fail-on: error
+          mode: strict
+          cli-version: "2.14.0"
+          comment-on-pr: true
+          update-badge: false        # PRs don't push to main, no badge commit needed

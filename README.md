@@ -117,7 +117,8 @@ mkdir -p .github/workflows && curl -fsSL \
 ```mermaid
 flowchart LR
     CHECKOUT["actions/checkout"] --> NODE["setup-node 20"]
-    NODE --> CLI["npm i -g grok-install-cli"]
+    NODE --> PY["setup-python 3.11"]
+    PY --> CLI["pip install grok-install"]
     CLI --> RUN["scripts/run.sh"]
     RUN --> VAL["grok-install validate --json"]
     RUN --> SCAN["grok-install scan --json"]
@@ -135,27 +136,27 @@ The PR-comment marker is `<!-- grokinstall-action:pr-comment -->` — swap it pe
 
 **Pinned dependencies:** Node 20 · `@actions/core@1.11.1` · `@actions/github@6.0.1` · `@octokit/rest@20.1.2` · composite steps reference each script by absolute path under `${{ github.action_path }}`.
 
-## ✦ What's New in v1.0
+## ✦ What's New in v1.1
 
 <table>
   <tr>
     <td width="50%">
-      <h3>🛒 Marketplace Ready</h3>
-      <p>Listing metadata published in <code>marketplace.yml</code>; ready to be linked once the GitHub Marketplace listing is live.</p>
+      <h3>🐍 PyPI Install</h3>
+      <p><code>grok-install</code> now ships from PyPI. The action installs it via <code>pip install "grok-install==&lt;cli-version&gt;"</code>, replacing the previous npm install path.</p>
     </td>
     <td width="50%">
-      <h3>📌 CLI Version Pinned</h3>
-      <p><code>cli-version</code> defaults to <code>2.14.0</code> (was <code>latest</code>) for supply-chain reproducibility. <a href="./docs/cli-version-pinning.md">Override syntax →</a></p>
+      <h3>🧹 Single Implementation</h3>
+      <p>Pruned the parallel TypeScript rewrite. The composite action in <code>action.yml</code> + <code>scripts/</code> is now the only source of truth.</p>
     </td>
   </tr>
   <tr>
     <td>
-      <h3>🎨 visuals-preview Input</h3>
-      <p>Opt-in, default <code>false</code>. On <code>cli-version >= 2.14.0</code> the CLI renders an HTML preview, URL surfaced in PR comment + <code>visuals-preview-url</code> output.</p>
+      <h3>📌 CLI Version Pinned</h3>
+      <p><code>cli-version</code> defaults to <code>2.14.0</code>. Override per-repo via any PEP 440 specifier. <a href="./docs/cli-version-pinning.md">Override syntax →</a></p>
     </td>
     <td>
-      <h3>🏷️ Release Automation</h3>
-      <p>Tag-triggered <code>release.yml</code> cuts a GitHub Release from <code>CHANGELOG.md</code> and force-moves the floating <code>v1</code> major-version tag.</p>
+      <h3>✅ Smoke-tested Examples</h3>
+      <p>Every file in <code>workflows-examples/</code> is now linted in CI and exercised against the sample agents. Copy-paste anything, it just runs.</p>
     </td>
   </tr>
   <tr>
@@ -172,7 +173,7 @@ The PR-comment marker is `<!-- grokinstall-action:pr-comment -->` — swap it pe
 | --- | --- | --- |
 | `working-directory` | `.` | Path to the repo root containing `.grok/` (or a sub-directory for monorepos). |
 | `mode` | `strict` | `strict` fails the job on errors. `warn` annotates only, never fails. |
-| `cli-version` | `2.14.0` | `grok-install-cli` version to install (any npm dist-tag or semver). Floor: `>= 2.0.0`. See [`docs/cli-version-pinning.md`](./docs/cli-version-pinning.md). |
+| `cli-version` | `2.14.0` | `grok-install` version to install from PyPI (any PEP 440 specifier — bare version is treated as `==`). Floor: `>= 2.0.0`. See [`docs/cli-version-pinning.md`](./docs/cli-version-pinning.md). |
 | `visuals-preview` | `false` | Forward `--visuals-preview` to the CLI and surface the rendered URL. Requires `cli-version >= 2.14.0`. |
 | `update-badge` | `true` | Generate `/badges/grok-native-certified.svg` and commit it on `main` pushes. |
 | `comment-on-pr` | `true` | Post / update a PR comment with the report. |
@@ -204,13 +205,14 @@ Or use a shields.io endpoint (auto-updates from your last run):
 
 ### Brand tokens for custom badges
 
+These match `grok-install-brand/tokens/colors.css` and the SVGs emitted by `scripts/badge.js`.
+
 | Token | Value | Preview |
 |---|---|---|
-| Background | `#0A0D14` | <img src="https://img.shields.io/badge/BG-0A0D14-0A0D14?style=for-the-badge&labelColor=0A0D14" /> |
-| Primary (cyan) | `#00E5FF` | <img src="https://img.shields.io/badge/Cyan-00E5FF-00E5FF?style=for-the-badge&labelColor=0A0D14" /> |
-| Accent (violet) | `#7C3AED` | <img src="https://img.shields.io/badge/Violet-7C3AED-7C3AED?style=for-the-badge&labelColor=0A0D14" /> |
-| Highlight (magenta) | `#FF4FD8` | <img src="https://img.shields.io/badge/Magenta-FF4FD8-FF4FD8?style=for-the-badge&labelColor=0A0D14" /> |
-| Danger | `#FF2D55` | <img src="https://img.shields.io/badge/Danger-FF2D55-FF2D55?style=for-the-badge&labelColor=0A0D14" /> |
+| Background | `#0A0A0A` | <img src="https://img.shields.io/badge/BG-0A0A0A-0A0A0A?style=for-the-badge&labelColor=0A0A0A" /> |
+| Primary (cyan) | `#00F0FF` | <img src="https://img.shields.io/badge/Cyan-00F0FF-00F0FF?style=for-the-badge&labelColor=0A0A0A" /> |
+| Success (neon green) | `#00FF9D` | <img src="https://img.shields.io/badge/Green-00FF9D-00FF9D?style=for-the-badge&labelColor=0A0A0A" /> |
+| Danger | `#FF2D55` | <img src="https://img.shields.io/badge/Danger-FF2D55-FF2D55?style=for-the-badge&labelColor=0A0A0A" /> |
 
 ## ✦ Permissions
 
@@ -234,6 +236,7 @@ Integration test (what CI runs):
 
 ```bash
 # Self-test uses the bundled sample agent
+pip install "grok-install==2.14.0"
 grok-install validate tests/sample-agent
 grok-install scan     tests/sample-agent
 ```
@@ -249,17 +252,17 @@ See [`CONTRIBUTING.md`](./CONTRIBUTING.md) for PR guidelines and [`CHANGELOG.md`
     <td width="33%">
       <h3>📦 grok-install</h3>
       <p>The universal spec this action validates.</p>
-      <a href="https://github.com/agentmindcloud/grok-install">Repository →</a>
+      <a href="https://github.com/AgentMindCloud/grok-install">Repository →</a>
     </td>
     <td width="33%">
       <h3>⚙️ grok-install-cli</h3>
-      <p>The CLI this action wraps. Shipped together.</p>
-      <a href="https://github.com/agentmindcloud/grok-install-cli">Repository →</a>
+      <p>The CLI this action wraps. Ships as <code>grok-install</code> on PyPI.</p>
+      <a href="https://github.com/AgentMindCloud/grok-install-cli">Repository →</a>
     </td>
     <td width="33%">
       <h3>🌟 awesome-grok-agents</h3>
       <p>10 certified templates you can validate with this action.</p>
-      <a href="https://github.com/agentmindcloud/awesome-grok-agents">Repository →</a>
+      <a href="https://github.com/AgentMindCloud/awesome-grok-agents">Repository →</a>
     </td>
   </tr>
 </table>

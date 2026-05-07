@@ -3,7 +3,7 @@ description: Composite GitHub Action — validate .grok/ agents, run the safety 
 url: https://agentmindcloud.github.io
 baseurl: /grok-install-action
 twitter:
-  username: agentmindcloud
+  username: JanSol0s
   card: summary_large_image
 social:
   name: AgentMindCloud
@@ -19,10 +19,7 @@ defaults:
       image: /docs/posters/og-default.png
 exclude:
   - scripts/
-  - schemas/
   - tests/
-  - dist/
-  - src/
   - node_modules/
   - "*.lock"
   - .github/

@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
-# run.sh — orchestrator. Calls grok-install-cli (validate + scan) and emits a
-# normalized report.json the rest of the action reads. Never exits non-zero on
-# CLI failures — strict-mode enforcement happens in the final action step.
+# run.sh — orchestrator. Calls the `grok-install` PyPI CLI (validate + scan)
+# and emits a normalized report.json the rest of the action reads. Never exits
+# non-zero on CLI failures — strict-mode enforcement happens in the final
+# action step.
 set -uo pipefail
 
 WORKDIR="${INPUT_WORKING_DIRECTORY:-.}"
@@ -21,7 +22,7 @@ if [ "${VISUALS_PREVIEW,,}" = "true" ]; then
   preview_args+=(--visuals-preview)
 fi
 
-echo "::group::grok-install-cli version"
+echo "::group::grok-install version"
 grok-install --version || true
 echo "::endgroup::"
 

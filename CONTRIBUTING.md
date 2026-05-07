@@ -18,14 +18,14 @@ npm ci
 npm test
 ```
 
-`npm test` runs `tests/unit.test.js`, which exercises `scripts/annotations.js` and `scripts/badge.js` against the JSON fixtures under `tests/fixtures/`. No network, no GitHub API, no `grok-install-cli` required.
+`npm test` runs `tests/unit.test.js`, which exercises `scripts/annotations.js` and `scripts/badge.js` against the JSON fixtures under `tests/fixtures/`. No network, no GitHub API, no `grok-install` install required.
 
 ## Integration test (what CI runs)
 
-To exercise the full pipeline, install the CLI and point it at the bundled sample agent:
+To exercise the full pipeline, install the CLI from PyPI and point it at the bundled sample agent:
 
 ```bash
-npm install -g grok-install-cli@2.14.0
+pip install "grok-install==2.14.0"
 grok-install validate tests/sample-agent
 grok-install scan     tests/sample-agent
 ```
@@ -40,15 +40,15 @@ grok-install validate tests/fixtures/valid-v2.14-visuals --visuals-preview
 
 | Path | What lives there |
 | --- | --- |
-| `action.yml` | Composite action definition — inputs, outputs, steps |
-| `marketplace.yml` | GitHub Marketplace listing metadata |
+| `action.yml` | Composite action definition — inputs, outputs, steps. Marketplace reads its `branding` block directly. |
 | `scripts/run.sh` | Orchestrator: runs CLI, normalizes `report.json`, emits step outputs |
 | `scripts/annotations.js` | Converts findings into `::error`/`::warning`/`::notice` + job summary |
 | `scripts/comment.js` | Upserts the pinned PR comment via Octokit |
 | `scripts/badge.js` | Generates the self-contained SVG badge |
 | `tests/unit.test.js` | Zero-dep Node test runner |
 | `tests/fixtures/` | JSON report fixtures + sample `.grok/` agents |
-| `workflows-examples/` | Copy-paste templates (basic, matrix, release) |
+| `tests/sample-agent*/` | End-to-end sample manifests used as smoke tests |
+| `workflows-examples/` | Copy-paste templates (basic, matrix, monorepo, release, with-claude-code) |
 | `docs/` | Long-form docs (e.g. cli-version pinning) |
 
 ## Commit convention

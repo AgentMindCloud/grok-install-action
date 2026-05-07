@@ -1,5 +1,18 @@
-name: Grok Install (monorepo)
-on: [push, pull_request]
+# monorepo.yml — single workflow, one job per agent directory.
+# Each job runs the action against a different `working-directory` so a
+# monorepo can certify all of its `.grok/` agents in parallel.
+name: GrokInstall (monorepo)
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
 
 jobs:
   certify:
@@ -11,11 +24,15 @@ jobs:
           - agents/viral-thread-architect
           - agents/reply-guy-bot
           - agents/raw-sentiment-parser
+    name: certify (${{ matrix.agent }})
     steps:
       - uses: actions/checkout@v4
+
       - name: Certify ${{ matrix.agent }}
         uses: AgentMindCloud/grok-install-action@v1
         with:
-          manifest-path: ${{ matrix.agent }}/grok-install.yaml
-          capabilities-path: ${{ matrix.agent }}/capabilities.yaml
-          badge-path: ${{ matrix.agent }}/.grok-install-badge.svg
+          working-directory: ${{ matrix.agent }}
+          mode: strict
+          cli-version: "2.14.0"
+          update-badge: false        # let a downstream root-badge job own the badge
+          comment-on-pr: true

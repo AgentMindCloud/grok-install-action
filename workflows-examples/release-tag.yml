@@ -1,24 +1,33 @@
-name: Grok Install (release)
+# release-tag.yml — fail any release tag whose .grok/ doesn't pass GrokInstall
+# in strict mode, then upload the generated badge as a release artifact.
+name: GrokInstall (release-tag)
+
 on:
   push:
     tags: ['v*']
 
+permissions:
+  contents: read
+  checks: write
+
 jobs:
   certify:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     steps:
       - uses: actions/checkout@v4
+
       - id: certify
         uses: AgentMindCloud/grok-install-action@v1
         with:
-          fail-on: error
-          comment: 'false'
+          mode: strict
+          cli-version: "2.14.0"
+          comment-on-pr: false       # tag pushes don't have a PR thread
+          update-badge: true
+
       - name: Upload certification artifact
-        if: steps.certify.outputs.certified == 'true'
+        if: steps.certify.outputs.passed == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: grok-certification-${{ github.ref_name }}
-          path: .github/badges/grok-install.svg
+          path: ${{ steps.certify.outputs.badge-path }}
           if-no-files-found: error

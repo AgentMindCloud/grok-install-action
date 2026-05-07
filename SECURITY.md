@@ -28,7 +28,7 @@ permissions:
 
 ## What the action executes
 
-- Installs `grok-install-cli@<cli-version>` from npm. Pin to an exact version (e.g. `2.0.1`) in security-sensitive repos instead of `latest`.
+- Installs the `grok-install` package from PyPI via `pip install "grok-install==<cli-version>"`. Pin to an exact version (e.g. `2.14.0`) in security-sensitive repos rather than a floating range.
 - Runs `grok-install validate --json` and `grok-install scan --json` in your repo.
 - Reads the generated report, writes GitHub workflow commands, and (optionally) calls the GitHub REST API to upsert a PR comment.
 - On `push` to `main` with `update-badge: true`, commits a single SVG under `badges/` using the provided token.
@@ -50,7 +50,7 @@ The action never:
 For production repos, pin to a commit SHA:
 
 ```yaml
-- uses: AgentMindCloud/grok-install-action@<full-commit-sha>  # v1.0.0
+- uses: AgentMindCloud/grok-install-action@<full-commit-sha>  # v1.1.0
 ```
 
 Major-version tag (`@v1`) is convenient but mutable.

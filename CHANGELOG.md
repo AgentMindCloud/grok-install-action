@@ -7,40 +7,86 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-05-07
+
+Cleanup release: single source of truth, fixed examples, Marketplace-ready.
+
 ### Added
-- `scripts/run.sh` now forwards `--visuals-preview` to `grok-install validate`
+- `scripts/check-examples.js` — CI lint that parses every
+  `workflows-examples/*.yml` and asserts each `with:` map only references
+  inputs declared in `action.yml`. Wired up as a new `examples` job in
+  `.github/workflows/test.yml`.
+- Integration matrix in `test.yml` now exercises the action against
+  `tests/sample-agent`, `tests/sample-agent-pass`, and `tests/sample-agent-rl`
+  in `mode: warn`, so every committed sample is treated as a smoke test.
+- `MERGE_PLAN.md` documenting that this repo stays standalone as the
+  Grok-Native CI gate.
+- `scripts/run.sh` forwards `--visuals-preview` to `grok-install validate`
   and `grok-install scan` when `visuals-preview: true`, extracts the rendered
   preview URL from the CLI's JSON output, and surfaces it on both the
-  `visuals-preview-url` step output and the pinned PR comment. Closes the gap
-  between the v1.0.0 docs/inputs and the actual implementation.
+  `visuals-preview-url` step output and the pinned PR comment.
 
 ### Changed
+- **CLI now installs from PyPI.** `action.yml` adds an `actions/setup-python@v5`
+  step and replaces `npm install -g grok-install-cli@<v>` with
+  `pip install "grok-install<spec>"`. `cli-version` accepts any PEP 440
+  specifier; bare versions are treated as `==`. `DISCLAIMER.md`, `SECURITY.md`,
+  `README.md`, `CONTRIBUTING.md`, and `docs/cli-version-pinning.md` updated to
+  match.
+- All six `workflows-examples/*.yml` files rewritten to use only inputs that
+  exist on `action.yml` (`working-directory`, `mode`, `cli-version`,
+  `visuals-preview`, `update-badge`, `comment-on-pr`, `github-token`).
+  `monorepo.yml`, `release-tag.yml`, and `with-claude-code.yml` previously
+  referenced phantom inputs (`manifest-path`, `capabilities-path`,
+  `badge-path`, `fail-on`, `comment`); those are gone.
+- `workflows-examples/basic.yml` and `release.yml` now pin `cli-version` to
+  `"2.14.0"` (was `latest`), aligning with `docs/cli-version-pinning.md`.
+- `README.md` brand-token table now matches `grok-install-brand/tokens/colors.css`
+  and `scripts/badge.js` (`#0A0A0A`, `#00F0FF`, `#00FF9D`, `#FF2D55`); the
+  contradictory violet/magenta values are gone. README `What's New` block
+  rewritten for v1.1.
+- `_config.yml`: Twitter handle updated to `JanSol0s` (matches `README.md`),
+  removed `dist/`, `src/`, and stale `schemas/` from the Jekyll exclude list.
+- `grok-install.yaml` self-manifest: dropped the dangling pointer to
+  `.github/workflows/self-certify.yml` (deleted in `4da30a0`); `entry`
+  points to `action.yml` rather than the deleted bundle.
 - `github-token` input no longer defaults to `${{ github.token }}`. Composite
   actions can't reference the `github` context in an input default; the token
-  now defaults to empty and each step falls back to `github.token` inline.
-  Consumers don't need to change anything — leaving the input unset keeps the
-  old behaviour.
-- Bumped pinned runtime dependencies: `@actions/core@1.11.1` (was `1.10.1`),
-  `@actions/github@6.0.1` (was `6.0.0`), `@octokit/rest@20.1.2` (was `20.1.1`).
-  Adds `npm overrides` for `@actions/http-client@3.0.2` and `undici@6.25.0` to
-  pull in patched transitive deps without bumping `@actions/github` to its
-  ESM-only major. `npm audit --omit=dev` now reports zero advisories.
-- Removed the in-README hero screenshot reference (`docs/img/pr-comment-hero.png`)
-  that pointed at a file not yet committed, plus the Marketplace badge linking
-  to a listing that has not been published. Both can be re-added once the
-  assets exist.
+  defaults to empty and each step falls back to `github.token` inline.
+
+### Removed
+- **`src/` and `dist/`** — the unwired TypeScript rewrite (~3 MB of bundle
+  artifact, none of it reachable from `action.yml`). The composite action
+  defined in `action.yml` + `scripts/*` is now the only source of truth.
+- `tsconfig.json`, `vitest.config.ts`, `eslint.config.js`, `.prettierrc.json`
+  — TS-only build configuration.
+- `tests/badge.test.ts`, `tests/comment.test.ts`, `tests/score.test.ts`,
+  `tests/validator.test.ts`, `tests/yaml-lines.test.ts`, `tests/snapshot/`
+  — Vitest tests against the deleted TS sources.
+- `scripts/dump-comments.ts`, `scripts/annotate.py` — uninvoked from any
+  workflow; superseded by `scripts/annotations.js`.
+- `marketplace.yml` — decorative metadata file; the Marketplace reads
+  `action.yml`'s `branding` block directly. Removing it eliminates a
+  documentation-drift surface.
 
 ### Fixed
+- `.github/workflows/release.yml` no longer writes `body=` to `$GITHUB_OUTPUT`
+  in the missing-CHANGELOG branch; both branches now write `release-notes.md`
+  and the `softprops/action-gh-release` step always reads it via `body_path`.
 - Load-time template error `Unrecognized named-value: 'github'` on `action.yml`.
-- `Install grok-install-cli` step no longer aborts the composite when the
-  requested `cli-version` is unavailable on the npm registry. The install
-  failure is logged as a workflow `::warning`; `scripts/run.sh` still produces
-  a structured `report.json` that flags the missing binary, and strict mode
+- `Install grok-install` step no longer aborts the composite when the
+  requested `cli-version` is unavailable on PyPI. The install failure is
+  logged as a workflow `::warning`; `scripts/run.sh` still produces a
+  structured `report.json` that flags the missing binary, and strict mode
   still fails at the final enforcement step.
 
 ### Security
-- Hardened the `Install grok-install-cli` step against shell-template injection
-  by routing `inputs.cli-version` through an `env:` block instead of expanding
+- Bumped pinned runtime dependencies: `@actions/core@1.11.1` (was `1.10.1`),
+  `@actions/github@6.0.1` (was `6.0.0`), `@octokit/rest@20.1.2` (was `20.1.1`).
+  Adds `npm overrides` for `@actions/http-client@3.0.2` and `undici@6.25.0`.
+  `npm audit --omit=dev` reports zero advisories.
+- Hardened the install step against shell-template injection by routing
+  `inputs.cli-version` through an `env:` block instead of expanding
   `${{ inputs.cli-version }}` directly inside the bash script.
 
 ## [1.0.0] - 2026-04-21
@@ -86,7 +132,8 @@ Initial scaffold — not published.
 - Repository skeleton: `action.yml` stub, `package.json`, Apache-2.0 `LICENSE`, `.gitignore`, `README.md`, `SECURITY.md`.
 - Marketplace metadata in `marketplace.yml`.
 
-[Unreleased]: https://github.com/AgentMindCloud/grok-install-action/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/AgentMindCloud/grok-install-action/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/AgentMindCloud/grok-install-action/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/AgentMindCloud/grok-install-action/compare/v0.1.0...v1.0.0
 [0.1.0]: https://github.com/AgentMindCloud/grok-install-action/compare/v0.0.1...v0.1.0
 [0.0.1]: https://github.com/AgentMindCloud/grok-install-action/releases/tag/v0.0.1
